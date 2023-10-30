@@ -1,0 +1,47 @@
+.selected {
+    width: 220px;
+    border: 1px solid black;
+}
+#id_class {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 700px;
+    height: auto;
+}
+#choises_tag {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+#ids {
+    display: flex;
+    flex-direction: column;
+}
+#classes {
+    display: flex;
+    flex-direction: column;
+}
+.butt {
+    margin-left: 65px;
+    margin-top: 30px;
+    width: 110px;
+    height: 21px;
+}
+    /* RANGE */
+#range {
+    display: none;
+    width: 110px;
+    align-items: center;
+    justify-content: space-between;
+    margin-left: 65px;
+}
+.range_value {
+    display: none;
+    border: 1px solid black;
+    width: 40px;
+}
+#range_text {
+    display: none;
+    margin-left: 65px;
+}

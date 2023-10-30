@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <title>Main</title>
+</head>
+<body>
+    <!-- URL -->
+    <form action="" method="post">
+        {% csrf_token %}
+        <h1>Your URL</h1>
+        {{ form.as_p }}
+    </form>
+    <button id="toggle_range">Несколько страниц</button>
+    <!-- ID -->
+
+    {% if ids or classes %}
+        <form action="{% url 'get_elements' %}" method="post" id="id_class">
+            {% csrf_token %}
+            <div id="choises_tag">
+            {% if ids %}
+                <div id="ids">
+                    <h1>All ID</h1>
+                    <select name="selected_id" class="selected">
+                        <option value="None">None</option>
+                        {% for i in ids %}
+                            <option value="{{ i }}">{{ i }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            {% endif %}
+
+            <!-- CLASSES -->
+            {% if classes %}
+                <div id="classes">
+                    <h1>All CLASS</h1>
+                    <select name="selected_class" class="selected">
+                        <option value="None">None</option>
+                        {% for c in classes %}
+                            <option value="{{ c }}">{{ c }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            {% endif %}
+            </div>
+        <br><br>
+
+            <!-- диапазон для парсинга нескольких страниц -->
+            <span style="margin-left: 65px;" id="range_text"><b>range:</b></span>
+            <div id="range">
+                <input id="from" class="range_value" type="number" value="0" name="from">
+                <span>-</span>
+                <input id="to" class="range_value" type="number" value="0" name="to">
+            </div>
+
+            <input type="hidden" name="uurl" value="{{ uurl }}">
+            <input type="submit" class="butt">
+        </form>
+    {% endif %}
+
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

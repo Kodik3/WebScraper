@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result data</title>
+    <style>
+        #range {
+            width: 110px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .range_value {
+            border: 1px solid black;
+            width: 40px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Result data</h1>
+    <form method="post" action="{% url 'save_data' %}">
+        {% csrf_token %}
+
+        <textarea name="result_data" id="result" cols="30" rows="10">
+            {% if classes %}
+                {{ classes }}
+            {% endif %}
+            {% if ids %}
+                {{ ids }}
+            {% endif %}
+        </textarea>
+        
+        <br><br>
+        
+        <label for="content_type">Выберите тип контента:</label><br>
+        <select name="content_type" id="content_type">
+            <option value="json">Json</option>
+            <option value="txt">Text document</option>
+        </select>
+        
+        <br><br>
+        <input type="submit" value="Скачать">
+    </form>
+</body>
+</html>
