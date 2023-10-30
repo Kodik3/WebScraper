@@ -13,12 +13,15 @@
     <form action="" method="post">
         {% csrf_token %}
         <h1>Your URL</h1>
-        {{ form.as_p }}
+        <div id="url_container">
+            {{ form.as_p }}
+            <input id="take_url" type="submit" value="Получить">
+        </div>
     </form>
-    <button id="toggle_range">Несколько страниц</button>
     <!-- ID -->
-
+    
     {% if ids or classes %}
+    <button id="toggle_range">Несколько страниц</button>
         <form action="{% url 'get_elements' %}" method="post" id="id_class">
             {% csrf_token %}
             <div id="choises_tag">

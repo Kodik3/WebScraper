@@ -11,6 +11,8 @@ SECRET_KEY = 'django-insecure-z7w$y+8=1sgraox0$1&#r=qb*dz0pr8=7v#c&(k6)8_n--0*7=
 DEBUG = True
 ALLOWED_HOSTS = []
 
+AUTH_USER_MODEL = 'auths.CastomUser'
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -18,8 +20,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_celery_results',
     # my apps\
-    'main.apps.MainConfig'
+    'main.apps.MainConfig',
+    'auths.apps.AuthsConfig'
 ]
 
 MIDDLEWARE = [
@@ -86,3 +90,11 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#! CELERY.
+CELERY_TIMEZONE = "Asia/Almaty"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_CACHE_BACKEND = 'redis'
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379'

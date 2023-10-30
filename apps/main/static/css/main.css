@@ -1,3 +1,15 @@
+    /* URL */
+#url_container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 300px;
+}
+#take_url {
+    width: 72px;
+    height: 22px;
+}
 .selected {
     width: 220px;
     border: 1px solid black;

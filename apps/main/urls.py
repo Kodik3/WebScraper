@@ -9,6 +9,6 @@ from .views import (
 
 urlpatterns: list = [
     path('', MainView.as_view(), name='main'),
-    path('get_elements/', get_elements, name='get_elements'),
-    path('save/', save_pars_data, name='save_data')
+    path('elements/', get_elements, name='get_elements'),
+    path('elements/save/', save_pars_data, name='save_data')
 ]

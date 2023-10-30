@@ -39,7 +39,7 @@ class MainView(View):
 
                 context['ids'] = ids
                 context['classes'] = classes
-
+                
             context['uurl'] = url
         context['form'] = form
         return render(req, self.template, context)
@@ -70,19 +70,21 @@ def get_elements(req: HttpRequest) -> HttpResponse:
                 context['error'] = str(e)
             context['classes'] = pages.get('classes')
             context['ids'] = pages.get('ids')
-            print(context)
+            print(f'milti_page: {context}')
             return render(req, 'result_data.html', context)
             
-        if selected_class is not None:
+        if selected_class != 'None':
             context['classes']  = GetHtml.class_elements(
                 code=GetHtml.code(url=url),
                 class_name=selected_class
             )
-        if selected_id is not None:
+            print('selected_class')
+        if selected_id != 'None':
             context['ids']  = GetHtml.id_elements(
                 code=GetHtml.code(url=url),
                 id_name=selected_id
             )
+            print('selected_id')
     except Exception as e:
         context['error'] = str(e)
     return render(req, 'result_data.html', context)
