@@ -1,7 +1,8 @@
 # Django.
 from django.http import (
     HttpRequest,
-    HttpResponse
+    HttpResponse,
+    HttpResponseBadRequest
 )
 from django.shortcuts import render
 from django import views
@@ -14,70 +15,58 @@ class CreatePageRequests(views.View):
     def get(self, req:HttpRequest) -> HttpResponse:
         ...
     
-    def post(self, req:HttpRequest) -> HttpResponse:
+    def post(self, req: HttpRequest) -> HttpResponse:
         data = req.POST #TODO: сделать форму
-        user = req.user
         
-        url = str(data.get('url'))
-        shift = int(data.get('shift')) # задержка в секундах.
-        minutes = int(data.get('duration_minutes'))
-        send_email = bool(data.get('send_email'))
+        url = str(data.get('url')) #* ссылка.
+        shift = int(data.get('shift')) #! - это шаг в секундах с которым будет выполнятся функция.
+        minutes = int(data.get('duration_minutes')) #* сколько будет работать функция.
+        send_email = bool(data.get('send_email')) #? отправить сообщение на почту после окончания или нет.
+        file_type = str(data.get('file_type')) #* тип файла, то есть в каком виде будет записаны данные.
         
         id_name = str(data.get('id_name'))
         class_name = str(data.get('class_name'))
         
         context: dict = {}
-        
-        if user.subscription_level == 1: #! max_min: 10, max_shift: 1:30 min (90 sec)
-            if minutes <= 10 and shift >= 90:
-                page_req = PageRequests.objects.create(
-                    user=user,
-                    url=url,
-                    duration_minutes=minutes,
-                    shift=shift,
-                    send_email=send_email
-                )
-                if id_name != 'None':
-                    page_req.id_name = id_name
-                if class_name != 'None':
-                    page_req.class_name = class_name
-                page_req.save()
-                work_page_request.apply_async(kwargs=context,countdown=page_req.shift)
-            else:
-                return ValidationError('Подписка 1 lvl может делать запросы максимум 10 минут')
 
-        elif user.subscription_level == 2: #! max_min: 30, max_shift: 40 sec
-            if minutes <= 30 and shift >= 40:
-                page_req = PageRequests.objects.create(
-                    user=user,
-                    url=url,
-                    shift=shift,
-                    send_email=send_email
-                )
-                if id_name != 'None':
-                    page_req.id_name = id_name
-                if class_name != 'None':
-                    page_req.class_name = class_name
-                page_req.save()
-                work_page_request.apply_async(kwargs=context,countdown=page_req.shift)
+        if req.user.is_authenticated:
+            user = req.user
+            if user.subscription_level == 1:
+                max_minutes, min_shift, max_shift = 10, 90, 300
+            elif user.subscription_level == 2:
+                max_minutes, min_shift, max_shift = 30, 40, 300
+            elif user.subscription_level == 3:
+                max_minutes, min_shift, max_shift = 50, 20, 300
             else:
-                return ValidationError('Подписка 2 lvl может делать запросы максимум 30 минут')
-                
-        elif user.subscription_level == 3: #! max_min: 50, max_shift: 20 sec
-            if minutes <= 50 and shift >= 20:
-                page_req = PageRequests.objects.create(
-                    user=user,
-                    url=url,
-                    shift=shift,
-                    send_email=send_email
-                )
-                if id_name != 'None':
-                    page_req.id_name = id_name
-                if class_name != 'None':
-                    page_req.class_name = class_name
-                page_req.save()
-                work_page_request.apply_async(kwargs=context,countdown=page_req.shift)
-            else:
-                return ValidationError('Подписка 3 lvl может делать запросы максимум 50 минут')
-        else: return None
+                max_minutes, min_shift, max_shift = 0, 0, 0
+                return ValidationError('Неверный уровень подписки')
+        else:
+            max_minutes, min_shift, max_shift = 0, 0, 0
+            return HttpResponseBadRequest('Вы не авторизированы')
+
+        if minutes > max_minutes or shift < min_shift or shift > max_shift:
+            return ValidationError(
+                f'Подписка {user.subscription_level} lvl может делать запросы '
+                f'максимум {max_minutes} минут, с задержкой не менее {min_shift} секунд и не более {max_shift} секунд'
+            )
+        
+        page_req = PageRequests.objects.create(
+            user=user,
+            url=url,
+            duration_minutes=minutes,
+            shift=shift,
+            file_type=file_type,
+            send_email=send_email
+        )
+
+        if id_name != 'None':
+            page_req.id_name = id_name
+        if class_name != 'None':
+            page_req.class_name = class_name
+        page_req.save()
+        
+        context['page_req'] = page_req
+        context['user'] = user
+        work_page_request.apply_async(kwargs=context,countdown=page_req.shift)
+        return HttpResponse("Success")
         

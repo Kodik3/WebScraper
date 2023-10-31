@@ -67,7 +67,7 @@ class GetHtml:
         
     @staticmethod
     def class_elements(code, class_name: str):
-        """ функция для получения данных из одного класса """
+        """ функция для получения данных из всех классов одного названия """
         if code:
             elements = code.find_all(class_=class_name)
             return json.dumps([{f"{idx}": GetHtml.clean_text(element.text)} for idx, element in enumerate(elements, 1)])
@@ -76,7 +76,7 @@ class GetHtml:
 
     @staticmethod
     def id_elements(code, id_name: str):
-        """ функция для получения данных из одного id """
+        """ функция для получения данных из всех id одного названия """
         if code:
             elements = code.find_all(id_=id_name)
             return json.dumps([{f"{idx}": GetHtml.clean_text(element.text)} for idx, element in enumerate(elements, 1)])

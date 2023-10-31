@@ -54,15 +54,15 @@ class PageRequests(models.Model):
         json = 'json'
         
     user = models.ForeignKey(to=CastomUser, verbose_name='пользователь', on_delete=models.CASCADE)
-    url = models.CharField(verbose_name='ссылка')
+    url = models.CharField(verbose_name='ссылка', max_length=200)
     duration_minutes = models.IntegerField(verbose_name='длительность в минутах')
     shift = models.IntegerField(verbose_name='сдвиг') # то есть через сколько минут будет отробатывть
-    file_type = models.CharField(choices=FileType.choices)
+    file_type = models.CharField(choices=FileType.choices, max_length=10)
     send_email = models.BooleanField(default=False)
     
-    id_name = models.CharField(verbose_name='id', blank=True, null=True, default=None)
-    class_name = models.CharField(verbose_name='class', blank=True, null=True, default=None)
+    id_name = models.CharField(verbose_name='id', blank=True, null=True, default=None, max_length=200)
+    class_name = models.CharField(verbose_name='class', blank=True, null=True, default=None, max_length=200)
     
 class DataPageRequest(models.Model):
     user = models.ForeignKey(to=CastomUser, verbose_name='пользователь', on_delete=models.CASCADE)
-    data = models.CharField(verbose_name="данные")
+    data = models.CharField(verbose_name="данные", max_length=1000)
