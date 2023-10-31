@@ -52,39 +52,42 @@ def get_elements(req: HttpRequest) -> HttpResponse:
         data = req.POST
         url = data.get('uurl')
         
-        selected_id = data.get('selected_id') #* id
-        selected_class = data.get('selected_class') #* class
+        selected_id = str(data.get('selected_id'))
+        selected_class = str(data.get('selected_class'))
 
-        #! RANGE:
-        first_range: int = int(data.get('from'))
-        last_range: int = int(data.get('to'))
-        if last_range > 0:
-            try:
-                pages = GetHtml.multiple_pages(
-                    url=url,
-                    range_=[first_range, last_range],
-                    class_name=selected_class,
+        is_range: str = str(data.get('is_range'))
+        
+        if is_range == 'True':
+            first_range: int = int(data.get('from'))
+            last_range: int = int(data.get('to'))
+            
+            if last_range > 0:
+                try:
+                    pages = GetHtml.multiple_pages(
+                        url=url,
+                        range_=[first_range, last_range],
+                        cls_name=selected_class,
+                        id_name=selected_id
+                    )
+                except Exception as e:
+                    print(e)
+                    context['error'] = str(e)
+                context['classes'] = pages.get('classes')
+                context['ids'] = pages.get('ids')
+                print('milti_page')
+        else:
+            if selected_class != 'None':
+                context['classes']  = GetHtml.class_elements(
+                    code=GetHtml.code(url=url),
+                    class_name=selected_class
+                )
+                print('selected_class')
+            if selected_id != 'None':
+                context['ids']  = GetHtml.id_elements(
+                    code=GetHtml.code(url=url),
                     id_name=selected_id
                 )
-            except Exception as e:
-                context['error'] = str(e)
-            context['classes'] = pages.get('classes')
-            context['ids'] = pages.get('ids')
-            print(f'milti_page: {context}')
-            return render(req, 'result_data.html', context)
-            
-        if selected_class != 'None':
-            context['classes']  = GetHtml.class_elements(
-                code=GetHtml.code(url=url),
-                class_name=selected_class
-            )
-            print('selected_class')
-        if selected_id != 'None':
-            context['ids']  = GetHtml.id_elements(
-                code=GetHtml.code(url=url),
-                id_name=selected_id
-            )
-            print('selected_id')
+                print('selected_id')
     except Exception as e:
         context['error'] = str(e)
     return render(req, 'result_data.html', context)

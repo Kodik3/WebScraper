@@ -53,11 +53,12 @@
         <br><br>
 
             <!-- диапазон для парсинга нескольких страниц -->
-            <span style="margin-left: 65px;" id="range_text"><b>range:</b></span>
+            <span id="range_text"><b>range:</b></span>
             <div id="range">
                 <input id="from" class="range_value" type="number" value="0" name="from">
                 <span>-</span>
                 <input id="to" class="range_value" type="number" value="0" name="to">
+                <input type="hidden" id="is_range_value" value="False" name="is_range">
             </div>
 
             <input type="hidden" name="uurl" value="{{ uurl }}">
@@ -65,6 +66,6 @@
         </form>
     {% endif %}
 
-    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/main.js' %}?v=1.1"></script>
 </body>
 </html>

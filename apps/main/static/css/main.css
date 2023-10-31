@@ -57,3 +57,6 @@
     display: none;
     margin-left: 65px;
 }
+#is_range_value {
+    display: none;
+}

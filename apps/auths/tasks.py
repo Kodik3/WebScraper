@@ -9,10 +9,9 @@ from celery import shared_task
 # requests.
 from main.utils import GetHtml
 from .models import PageRequests
-# from abstracts.utils import send_email
 
 
-# @app.task
+@app.task
 def subscription_verification():
     #! функция для проверки подписки у всех пользователей
     #! будет отробатывать каждый день и убирать подписки 
@@ -34,7 +33,7 @@ def subscription_verification():
     #     )
     # else: return None
     
-# @app.task
+@app.task
 def finish_sub(sub, *args, **kwargs):
     #! будет запускатся когда
     #! пользователь купил подписку
@@ -68,29 +67,29 @@ def work_page_request(page_req, *args, **kwargs):
                 )
         return result_data
 
-data = {
-            'url': 'https://quotes.toscrape.com/',
-            'shift': 20,
-            'duration_minutes': 5,
-            'send_email': False,
-            'file_type': 'json',
-            'id_name': 'None',
-            'class_name': 'quote',
-        }
-user = CastomUser.objects.get(id=1)
-fake_page_req = PageRequests.objects.create(
-    user=user,
-    url=data['url'],
-    shift=data['shift'],
-    duration_minutes=data['duration_minutes'],
-    send_email=data['send_email'],
-    file_type=data['file_type'],
-    id_name=data['id_name'],
-    class_name=data['class_name'],
-)
+# data = {
+#             'url': 'https://quotes.toscrape.com/',
+#             'shift': 20,
+#             'duration_minutes': 5,
+#             'send_email': False,
+#             'file_type': 'json',
+#             'id_name': 'None',
+#             'class_name': 'quote',
+#         }
+# user = CastomUser.objects.get(id=1)
+# fake_page_req = PageRequests.objects.create(
+#     user=user,
+#     url=data['url'],
+#     shift=data['shift'],
+#     duration_minutes=data['duration_minutes'],
+#     send_email=data['send_email'],
+#     file_type=data['file_type'],
+#     id_name=data['id_name'],
+#     class_name=data['class_name'],
+# )
 
-@shared_task
-def test_page_req():
-    result = work_page_request.apply_async(args=[fake_page_req])
-    print("Task ID:", result.id)
-    print("MY RESULT: ", result)
+# @shared_task
+# def test_page_req():
+#     result = work_page_request.apply_async(args=[fake_page_req])
+#     print("Task ID:", result.id)
+#     print("MY RESULT: ", result)
