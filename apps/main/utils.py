@@ -2,8 +2,6 @@ from bs4 import BeautifulSoup as BS
 import requests
 import unicodedata
 import json
-# models.
-from auths.models import CastomUser
 
 
 class GetHtml:
@@ -15,30 +13,12 @@ class GetHtml:
             if response.status_code == 200:
                 return BS(response.text, 'lxml')
             else:
-                print(f"Error: {response.status_code}")
                 return None
         except Exception as e:
-            print(f"Exception: {e}")
-            return None
+            return f"[Error code] - {e}"
 
     @staticmethod
-    def multiple_pages(url, range_: list, cls_name: str, id_name: str) -> list:
-        """ функция получения данных из классов и id из нескольких страниц """
-        pages: dict = {}
-        for page_num in range(range_[0], range_[1]):
-            url = f"{url}page/{page_num}/"
-            code = GetHtml.code(url)
-            page: dict = {}
-
-            if cls_name != 'None':
-                page[f'{page_num}_page_class']=GetHtml.class_elements(code, cls_name)
-            if id_name != 'None':
-                page[f'{page_num}_page_id']=GetHtml.id_elements(code, id_name)
-            pages[f'data-{page_num}'] = page
-        return pages
-
-    @staticmethod
-    def all_id(code):
+    def all_id(code) -> list:
         """ функция для получения всех id из страницы """
         if code:
             elem_id = code.find_all(id=True)
@@ -47,7 +27,7 @@ class GetHtml:
             return []
 
     @staticmethod
-    def all_class(code):
+    def all_class(code) -> list:
         """ функция для получения всех классов из страницы """
         if code:
             elem_class = code.find_all(class_=True)
@@ -63,21 +43,68 @@ class GetHtml:
         return cleaned_text
         
     @staticmethod
-    def class_elements(code, class_name: str):
+    def class_elements(code, class_name: str, content_type: str):
         """ функция для получения данных из всех классов одного названия """
         if code:
             elements = code.find_all(class_=class_name)
-            return json.dumps(
-                [{f"{idx}": GetHtml.clean_text(element.text)} for idx, element in enumerate(elements, 1)]
-            )
+            if content_type == "txt":
+                result = ['{}. {}'.format(idx, GetHtml.clean_text(element.text)) for idx, element in enumerate(elements, 1)]
+                result = '\n'.join(result)
+            elif content_type == 'json':
+                result = json.dumps({f"{idx}": GetHtml.clean_text(element.text) for idx, element in enumerate(elements, 1)})
+            return result
         else:
             return []
 
     @staticmethod
-    def id_elements(code, id_name: str):
+    def id_elements(code, id_name: str, content_type: str):
         """ функция для получения данных из всех id одного названия """
         if code:
             elements = code.find_all(id_=id_name)
-            return json.dumps([{f"{idx}": GetHtml.clean_text(element.text)} for idx, element in enumerate(elements, 1)])
+            if content_type == 'txt':
+                result = ['{}. {}'.format(idx, GetHtml.clean_text(element.text)) for idx, element in enumerate(elements, 1)]
+                result = '\n'.join(result)
+            elif content_type == 'json':
+                result = json.dumps({f"{idx}": GetHtml.clean_text(element.text) for idx, element in enumerate(elements, 1)})
+            return result
         else:
             return []
+
+
+class MultiplePages:
+    @staticmethod
+    def get_json_data(url, page_range: list, cls_name: str, id_name: str) -> dict:
+        pages_data: dict = {}
+        content_type = "json"
+        for page_num in range(page_range[0], page_range[1]+1):
+            page_url = f"{url}page/{page_num}/"
+            
+            try:
+                code = GetHtml.code(page_url)
+                # class.
+                if cls_name != 'None':
+                    pages_data[f"page-{page_num}"] = GetHtml.class_elements(code, cls_name, content_type)
+                # id.
+                if id_name != 'None':
+                    pages_data[f"page-{page_num}"] = GetHtml.id_elements(code, id_name, content_type)
+            except Exception as e:
+                pages_data[f"error-{page_num}"] = str(e)
+        return pages_data
+
+    @staticmethod
+    def get_text_data(url, page_range: list, cls_name: str, id_name: str) -> str:
+        pages_data: str = ""
+        content_type = "txt"
+        for page_num in range(page_range[0], page_range[1]+1):
+            page_url = f"{url}page/{page_num}/"
+            try:
+                code = GetHtml.code(page_url)
+                # class.
+                if cls_name != 'None':
+                    pages_data += f"Page-{page_num}\n {GetHtml.class_elements(code, cls_name, content_type)}"
+                # id.
+                if id_name != 'None':
+                    pages_txt_data += f"Page-{page_num}\n {GetHtml.id_elements(code, id_name, content_type)}"
+            except Exception as e:
+                pages_data += f"error-{page_num}:: {str(e)}"
+        return pages_data

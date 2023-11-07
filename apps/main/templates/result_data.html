@@ -22,24 +22,20 @@
     <h1>Result data</h1>
     <form method="post" action="{% url 'save_data' %}">
         {% csrf_token %}
-
         <textarea name="result_data" id="result" cols="30" rows="10">
-            {% if classes %}
-               {class : {{ classes }}}
-            {% endif %}
-            {% if ids %}
-               {id : {{ ids }} }
-            {% endif %}
+{% if classes %}
+{{ classes }}
+{% endif %}
+
+{% if ids %}
+{{ ids }} 
+{% endif %}
+
+{% if pages %}
+{{ pages }}
+{% endif %}
         </textarea>
-        
-        <br><br>
-        
-        <label for="content_type">Выберите тип контента:</label><br>
-        <select name="content_type" id="content_type">
-            <option value="json">Json</option>
-            <option value="txt">Text document</option>
-        </select>
-        
+        <input type="hidden" name="content_type" value="{{ content_type }}">
         <br><br>
         <input type="submit" value="Скачать">
     </form>

@@ -1,0 +1,14 @@
+#error {
+    color: red;
+}
+#choises_tag {
+    width: 600px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+.selected {
+    width: 220px;
+    height: 20px;
+    border: 1px solid black;
+}

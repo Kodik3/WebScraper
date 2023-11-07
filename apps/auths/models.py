@@ -32,7 +32,7 @@ class CastomUser(AbstractBaseUser, PermissionsMixin):
     # подписка \
     subscription: bool = models.BooleanField(default=False, verbose_name='подписка')
     subscription_end_date = models.DateField(verbose_name='дата окончания', blank=True, null=True)
-    subscription_level = models.IntegerField(choices=SubLevel.choices, blank=True, null=True)
+    subscription_level = models.IntegerField(choices=SubLevel.choices, blank=True, null=True, default=0)
     
     objects = CastomUserManager()
 
@@ -57,12 +57,12 @@ class PageRequests(models.Model):
     url = models.CharField(verbose_name='ссылка', max_length=200)
     duration_minutes = models.IntegerField(verbose_name='длительность в минутах')
     shift = models.IntegerField(verbose_name='сдвиг') # то есть через сколько минут будет отробатывть
-    file_type = models.CharField(choices=FileType.choices, max_length=10)
+    content_type = models.CharField(choices=FileType.choices, max_length=10)
     send_email = models.BooleanField(default=False)
     
     id_name = models.CharField(verbose_name='id', blank=True, null=True, default=None, max_length=200)
     class_name = models.CharField(verbose_name='class', blank=True, null=True, default=None, max_length=200)
-    
+
 class DataPageRequest(models.Model):
     user = models.ForeignKey(to=CastomUser, verbose_name='пользователь', on_delete=models.CASCADE)
     data = models.CharField(verbose_name="данные", max_length=1000)

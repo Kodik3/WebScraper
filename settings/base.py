@@ -1,4 +1,5 @@
 from pathlib import Path
+from decouple import config
 import os
 import sys
 
@@ -7,13 +8,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 sys.path.append(BASE_DIR)
 sys.path.append(os.path.join(BASE_DIR, 'apps'))
 
-SECRET_KEY = 'django-insecure-z7w$y+8=1sgraox0$1&#r=qb*dz0pr8=7v#c&(k6)8_n--0*7='
-DEBUG = True
+SITE_NAME = 'WebNeScraper'
+SECRET_KEY = config('SECRET_KEY', str)
+DEBUG = config('DEBUG', bool)
 ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = 'auths.CastomUser'
 
-INSTALLED_APPS = [
+DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -21,10 +23,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_celery_results',
-    # my apps\
-    'main.apps.MainConfig',
-    'auths.apps.AuthsConfig'
 ]
+
+PROJECT_APPS = [
+    'main.apps.MainConfig',
+    'auths.apps.AuthsConfig',
+    'abstracts.apps.AbstractsConfig'
+]
+
+INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -78,6 +85,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
+#! EMAIL
+EMAIL_FROM = config('EMAIL_FROM', str)
 
 LANGUAGE_CODE = 'ru-RU'
 TIME_ZONE = 'Asia/Almaty'

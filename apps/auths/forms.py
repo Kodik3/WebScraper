@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 # models.
-from .models import CastomUser
+from .models import CastomUser, PageRequests
 
 
 class RegisterUserForm(forms.Form):
