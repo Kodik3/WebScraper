@@ -66,3 +66,4 @@ class PageRequests(models.Model):
 class DataPageRequest(models.Model):
     user = models.ForeignKey(to=CastomUser, verbose_name='пользователь', on_delete=models.CASCADE)
     data = models.CharField(verbose_name="данные", max_length=1000)
+    date_create = models.DateField(auto_now_add=True)
