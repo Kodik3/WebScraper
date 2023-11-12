@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="https://w7.pngwing.com/pngs/638/904/png-transparent-logo-circle-point-authorization-white-logo-black.png" type="image/png">
+    <title>Регистрация</title>
+    <!-- start style -->
+    <style>
+        body{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            height: 770px;
+            color: #444;
+        }
+        input{
+            width: 200px;
+        }
+    </style>
+    <!-- end style -->
+</head>
+<body>
+    <h1>Регистрация</h1>
+    <form action="/auths/reg/" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Регистрация">
+    </form>
+</body>
+</html>

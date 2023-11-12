@@ -1,12 +1,26 @@
+
+"""| AUTHS FORMS |"""
+
+# Django.
 from django import forms
+from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 # models.
 from .models import CastomUser, PageRequests
 
 
 class RegisterUserForm(forms.Form):
+    """ 
+    REGISTRATION FORM 
+
+    Параметры:
+        - email (str)
+        - name (str)
+        - password (str)
+        - password2 (str)
+    """
     email = forms.EmailField(label='Почта', max_length=200)
-    nickname = forms.CharField(label="Ваш ник", max_length=100)
+    name = forms.CharField(label="Имя", max_length=100)
     password = forms.CharField(label='Пароль', min_length=6)
     password2 = forms.CharField(label='Повторите пароль', min_length=6)
     
@@ -19,7 +33,25 @@ class RegisterUserForm(forms.Form):
         return self.cleaned_data
 
 
-class LoginUserForm(forms.ModelForm):
-    class Meta:
-        model = CastomUser
-        fields = ('email', 'password')
+class LoginUserForm(forms.Form):
+    """
+    LOGIN FORM
+
+    Параметры:
+        - email (str)
+        - password (str)
+    """
+    email = forms.EmailField(label='Почта')
+    password = forms.CharField(label='Пароль', widget=forms.PasswordInput)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        email = cleaned_data.get('email')
+        password = cleaned_data.get('password')
+
+        if email and password:
+            user = authenticate(username=email, password=password)
+            if user is None:
+                raise forms.ValidationError('Неверные учетные данные')
+
+        return cleaned_data

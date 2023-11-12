@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="https://images.rawpixel.com/image_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png" type="image/png">
+    <title>Profile</title>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="top-container">
+                <img src="https://static.vecteezy.com/system/resources/previews/001/840/618/original/picture-profile-icon-male-icon-human-or-people-sign-and-symbol-free-vector.jpg" class="img-fluid profile-image" width="70" alt="User IMG">
+                <div class="ml-3">
+
+                    <p class="name">Name: {{ user.name }}</p>
+                    <p class="email">Email:  {{ user.email }}</p>
+                    <br>
+                    <p><a href="{% url 'page_req' %}">Create request</a></p>
+                    <p><a href="{% url 'req_data' %}">Request data</a></p>
+                    <p><a href="{% url 'logout' %}">Logout</a></p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

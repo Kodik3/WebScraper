@@ -21,15 +21,17 @@ class CastomUserManager(BaseUserManager):
 
 class CastomUser(AbstractBaseUser, PermissionsMixin):
     class SubLevel(models.Choices):
+        level_0 = 0
         level_1 = 1
         level_2 = 2
         level_3 = 3
         
     email = models.EmailField(verbose_name='почта/логин', max_length=200, unique=True)
-    password = models.CharField(verbose_name='пароль', max_length=60, unique=True)
     name = models.CharField(verbose_name='имя', max_length=100)
+    password = models.CharField(verbose_name='пароль', max_length=60, unique=True)
     is_staff: bool = models.BooleanField(default=False)
-    # подписка \
+
+    #* подписка
     subscription: bool = models.BooleanField(default=False, verbose_name='подписка')
     subscription_end_date = models.DateField(verbose_name='дата окончания', blank=True, null=True)
     subscription_level = models.IntegerField(choices=SubLevel.choices, blank=True, null=True, default=0)

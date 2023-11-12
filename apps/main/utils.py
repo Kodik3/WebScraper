@@ -5,6 +5,9 @@ import json
 
 
 class GetHtml:
+    """
+    Класс с инструментами для взятия и обработки данных со страницы
+    """
     @staticmethod
     def code(url: str):
         """ функция для взятия кода страницы """
@@ -72,8 +75,11 @@ class GetHtml:
 
 
 class MultiplePages:
+    """
+    Класс для взятия данных с нескольких страниц
+    """
     @staticmethod
-    def get_json_data(url, page_range: list, cls_name: str, id_name: str) -> dict:
+    def get_json_data(url: str, page_range: list, cls_name: str, id_name: str) -> dict:
         pages_data: dict = {}
         content_type = "json"
         for page_num in range(page_range[0], page_range[1]+1):
@@ -92,7 +98,7 @@ class MultiplePages:
         return pages_data
 
     @staticmethod
-    def get_text_data(url, page_range: list, cls_name: str, id_name: str) -> str:
+    def get_text_data(url: str, page_range: list, cls_name: str, id_name: str) -> str:
         pages_data: str = ""
         content_type = "txt"
         for page_num in range(page_range[0], page_range[1]+1):

@@ -48,8 +48,11 @@ class CreatePageRequests(View):
     template: str = 'temporary_page_request.html'
 
     def get(self, req:HttpRequest) -> HttpResponse:
+        user = req.user
+        if user.subscription is False:
+            return HttpResponse('У вас не подписки')
         context: dict = {}
-        context["content_types"] = ['json', 'txt'] #! сделать удобнее!
+        context["content_types"] = ['json', 'txt']
         return render(req, self.template, context)
     
     def post(self, req: HttpRequest) -> HttpResponse:
