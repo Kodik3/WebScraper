@@ -81,18 +81,21 @@ class UserProfile(View):
 
 class AllUserPagesRequestsView(View):
     template: str = 'all_user_req_page.html'
+    OBJECTS_PER_PAGE: int = 10 #* Количество объектов на одной странице
 
     def get(self, req: HttpRequest) -> HttpResponse:
-
         user = req.user
         if not user.is_authenticated:
             return HttpResponse("У вас нет аккаунта. Создайте аккаунт, чтобы использовать эту функцию.")
 
         context: dict = {}
-        OBJECTS_PER_PAGE: int = 10 #* Количество объектов на одной странице
-
+        content_type = req.GET.get('content_type')
         objects = DataPageRequest.objects.filter(user=user)
-        paginator = Paginator(objects, OBJECTS_PER_PAGE)
+
+        if content_type:
+            objects = objects.filter(content_type=content_type)
+
+        paginator = Paginator(objects, self.OBJECTS_PER_PAGE)
 
         page = req.GET.get('page')
         try:
@@ -104,6 +107,7 @@ class AllUserPagesRequestsView(View):
 
         context['current_page'] = current_page
         return render(req, self.template, context)
+
 
 class SubDocumentation(View):
     """
@@ -117,3 +121,8 @@ class SubDocumentation(View):
 def user_logout(req: HttpRequest):
     logout(req)
     return redirect('login')
+
+    def content_type_filtering(self, user, content_type):
+        return DataPageRequest.objects.filter(
+            user=user, content_type=content_type
+        )

@@ -1,7 +1,8 @@
 # Python.
 from datetime import datetime as dt
-import time
+from datetime import timedelta
 # Django.
+from django.utils import timezone
 from django.conf import settings
 # models.
 from .models import (
@@ -12,7 +13,6 @@ from .models import (
 from settings.celery import app
 from celery import shared_task
 # Local.
-from main.utils import GetHtml
 from abstracts.utils import send_email
 
 #! ДОБАВИТЬ ССЫЛКИ !!!!!!!!!!!
@@ -51,3 +51,12 @@ def finish_sub(user, *args, **kwargs):
             msg='Вы можете обновить подписку на странице <a href="{}"></a>'.format('тут будет ссылка на страницу покупки подписки'),
             to_emails=[user.email]
         )
+
+
+@app.task(name='clearing-old-queries')
+def clearing_old_queries():
+    one_month_ago = timezone.now() - timedelta(days=30)
+    old_data_requests: DataPageRequest = \
+        DataPageRequest.objects.filter(date_create__gte=one_month_ago.date())
+    old_data_requests.delete()
+    return

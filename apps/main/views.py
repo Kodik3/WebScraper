@@ -4,7 +4,7 @@ from django.http import (
     HttpResponse,
     HttpResponseBadRequest
 )
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.views import View
 from django.core.files.base import ContentFile
 from django.core.exceptions import ValidationError

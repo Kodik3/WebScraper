@@ -8,7 +8,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 sys.path.append(BASE_DIR)
 sys.path.append(os.path.join(BASE_DIR, 'apps'))
 
-SITE_NAME = 'WebNeScraper'
 SECRET_KEY = config('SECRET_KEY', str)
 DEBUG = config('DEBUG', bool)
 ALLOWED_HOSTS = []

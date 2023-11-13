@@ -35,11 +35,17 @@
             </div>
         </div>
 
+        <form method="get" action="{% url 'req_data' %}">
+            <p>Фильтрация</p>
+            <button type="submit" name="content_type" value="json">JSON</button>
+            <button type="submit" name="content_type" value="txt">TXT</button>
+        </form>
+
         <div class="container">
             <div class="item_container">
                 {% for item in current_page %}
                     <div class="page_item">
-                        <p>{{ item.date_create }}</p>    
+                        <p><i>{{ item.content_type }} {{ item.date_create }}</i></p>    
                         <p>{{ item.data }}</p>
                     </div>
                 {% empty %}

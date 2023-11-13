@@ -25,7 +25,7 @@ class GetHtml:
         """ функция для получения всех id из страницы """
         if code:
             elem_id = code.find_all(id=True)
-            return list(set(element['id'] for element in elem_id))
+            return sorted(list(set(element['id'] for element in elem_id)))
         else:
             return []
 
@@ -34,7 +34,7 @@ class GetHtml:
         """ функция для получения всех классов из страницы """
         if code:
             elem_class = code.find_all(class_=True)
-            return list(set(class_ for element in elem_class for class_ in element['class']))
+            return sorted(list(set(class_ for element in elem_class for class_ in element['class'])))
         else:
             return []
 
