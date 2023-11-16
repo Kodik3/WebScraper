@@ -19,28 +19,25 @@ from auths.models import CastomUser, PageRequests
 #! Главная страница.
 class MainView(View):
     """ для полученяи кода страницы """
-    template: str = 'main_page.html'
+    template: str = 'main_template.html'
 
     def get(self, req: HttpRequest) -> HttpResponse:
-        form = MainForm()
         context: dict = {}
-        context['form'] = form
+        context['user'] = req.user
         return render(req, self.template, context)
 
     def post(self, req: HttpRequest) -> HttpResponse:
         context: dict = {}
-        form = MainForm(data=req.POST)
-        if form.is_valid():
-            code = GetHtml.code(str(form.cleaned_data['url'])) # HTML code.
-            context["uurl"] = str(form.cleaned_data['url'])
+        data = req.POST
+        code = GetHtml.code(str(data.get('url'))) # HTML code.
+        context["uurl"] = str(data.get('url'))
 
-            if code is not None:
-                ids = GetHtml.all_id(code) # id.
-                classes = GetHtml.all_class(code) # class.
+        if code is not None:
+            ids = GetHtml.all_id(code) # id.
+            classes = GetHtml.all_class(code) # class.
 
-                context["ids"] = ids
-                context["classes"] = classes
-        context["form"] = form
+            context["ids"] = ids
+            context["classes"] = classes
         return render(req, self.template, context)
 
 

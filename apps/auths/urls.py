@@ -7,8 +7,9 @@ from .views import (
     LoginView,
     UserProfile,
     AllUserPagesRequestsView,
-    SubDocumentation,
-    user_logout
+    BuySubView,
+    user_logout,
+    free_sub,
 )
 
 urlpatterns: list = [
@@ -17,5 +18,6 @@ urlpatterns: list = [
     path('profile/', UserProfile.as_view(), name='user_profile'),
     path('logout/', user_logout, name='logout'),
     path('request_data/', AllUserPagesRequestsView.as_view(), name='req_data'),
-    path('sub_doc/', SubDocumentation.as_view(), name='sub_doc')
+    path('sub/', BuySubView.as_view(), name='buy_sub'),
+    path('free/sub/', free_sub, name='free_sub')
 ]

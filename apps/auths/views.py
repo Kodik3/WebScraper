@@ -4,8 +4,10 @@
 from django.http import (
     HttpRequest,
     HttpResponse,
-    Http404
+    Http404,
+    JsonResponse
 )
+from django.conf import settings
 from django.shortcuts import render, redirect
 from django.views import View
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -14,6 +16,10 @@ from django.contrib.auth import authenticate, login, logout
 from .models import DataPageRequest, CastomUser
 # forms.
 from .forms import RegisterUserForm, LoginUserForm
+# tasks
+from .tasks import destroy_free_sub
+# Local.
+from abstracts.utils import send_email
 
 
 class RegistrationView(View):
@@ -109,20 +115,44 @@ class AllUserPagesRequestsView(View):
         return render(req, self.template, context)
 
 
-class SubDocumentation(View):
-    """
-    Template c документацией о уровнях подписки.
-    """
-    template: str = 'sub_documentation.html'
+class BuySubView(View):
+    template: str = 'purchasing_sub.html'
     def get(self, req: HttpRequest) -> HttpResponse:
-        return render(req, self.template)
+        context: dict = {}
+        return render(req, self.template, context)
 
 
 def user_logout(req: HttpRequest):
+    """
+    функция выхода пользователя из сессии.
+    """
     logout(req)
     return redirect('login')
 
-    def content_type_filtering(self, user, content_type):
-        return DataPageRequest.objects.filter(
-            user=user, content_type=content_type
+def content_type_filtering(user, content_type):
+    return DataPageRequest.objects.filter(
+        user=user, content_type=content_type
+    )
+
+def free_sub(req: HttpRequest) -> HttpResponse:
+    context: dict = {}
+    user = req.user
+    DAYS_ACTIVE_3  = 3*24*60*60
+    if user.is_authenticated:
+        if user.free_subscription_is_use == True:
+            return HttpResponse("Вы использовали бесплатную подписку!")
+        user.free_subscription_is_use = True
+        user.subscription = True
+        user.subscription_level = 1
+        user.save()
+
+        context['user'] = user
+        destroy_free_sub.apply_async(kwargs=context, countdown=DAYS_ACTIVE_3)
+        send_email(
+            header=f"| {settings.SITE_NAME} | Подписка lvl-1",
+            msg='Вы получили подписку, она закончится через 3 дня',
+            to_emails=[user.email]
         )
+        return redirect('main')
+    else:
+        return HttpResponse("Нужно войти в аккаунт")

@@ -1,13 +1,53 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- link header style -->
+    <link rel="stylesheet" href="{% static 'css/base_header.css' %}">
     <link rel="shortcut icon" href="https://images.rawpixel.com/image_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png" type="image/png">
     <title>Profile</title>
+    <style>
+        body {
+            font-family: Impact, fantasy;
+            max-height: 100vh;
+        }
+        a {
+            text-decoration: none;
+            color: rgb(80, 33, 66);
+        }
+        .container {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
+    <!-- header start -->
+    <header class="base-header">
+        <p class="header-SiteName"><a style="color: #111;" href="{% url 'main' %}">WebNeScraper</a></p>
+
+        <div class="header-options">
+            <div class="header-options_item"><a href="{% url 'buy_sub' %}">Подписка</a></div>
+            <div class="header-options_item"><a href="{% url 'page_req' %}">Create request</a></div>
+            {% if user.free_subscription_is_use is False %}
+                <div class="header-options_item"><a href="{% url 'free_sub' %}">Бесплатная подписка</a></div>
+            {% endif %}
+            <div class="header-options_item"><a href="https://www.youtube.com/watch?v=QX43QTYyV-8">Spin Fish</a></div>
+        </div>
+
+        <div class="header-user-status">
+            {% if user.is_authenticated %}
+                <a href="{% url 'user_profile' %}">Profile</a>
+            {% else %}
+                <a href="{% url 'registration' %}">Registration</a>
+                <a href="{% url 'login' %}">Login</a>
+            {% endif %}
+        </div>
+    </header>
+    <!-- header end -->
+
     <div class="container">
         <div class="card">
             <div class="top-container">
@@ -16,6 +56,7 @@
 
                     <p class="name">Name: {{ user.name }}</p>
                     <p class="email">Email:  {{ user.email }}</p>
+                    <p class="user_sub_lvl">Subscription lvl: {{ user.subscription_level }}</p>
                     <br>
                     <p><a href="{% url 'req_data' %}">Request data</a></p>
                     <p><a href="{% url 'logout' %}">Logout</a></p>

@@ -1,0 +1,116 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- link main style -->
+    <link rel="stylesheet" href="{% static 'css/main_style.css' %}">
+    <!-- link header style -->
+    <link rel="stylesheet" href="{% static 'css/base_header.css' %}">
+    
+    <title>Main</title>
+</head>
+<body>
+    <!-- header start -->
+    <header class="base-header">
+        <p class="header-SiteName"><a style="color: #111;" href="{% url 'main' %}">WebNeScraper</a></p>
+
+        <div class="header-options">
+            <div class="header-options_item"><a href="{% url 'buy_sub' %}">Подписка</a></div>
+            <div class="header-options_item"><a href="{% url 'page_req' %}">Create request</a></div>
+            {% if user.free_subscription_is_use is False %}
+                <div class="header-options_item"><a href="{% url 'free_sub' %}">Бесплатная подписка</a></div>
+            {% endif %}
+            <div class="header-options_item"><a href="https://www.youtube.com/watch?v=QX43QTYyV-8">Spin Fish</a></div>
+        </div>
+
+        <div class="header-user-status">
+            {% if user.is_authenticated %}
+                <a href="{% url 'user_profile' %}">Profile</a>
+            {% else %}
+                <a href="{% url 'registration' %}">Registration</a>
+                <a href="{% url 'login' %}">Login</a>
+            {% endif %}
+        </div>
+    </header>
+    <!-- header end -->
+
+    <div id="main_content">
+        <div id="main_right"></div>
+
+        <div id="main_middle">
+            <!-- URL -->
+            <form id="main_middle_url_block" action="" method="post">
+                {% csrf_token %}
+                <input id="url_input" type="url" name="url" placeholder="Your URL" value="{{ uurl }}">
+                <input id="take_url_button" type="submit" value="Получить">
+            </form>
+
+            <div id="main_options">
+                {% if ids or classes %}
+                <button id="toggle_range">Несколько страниц</button>
+                <form action="{% url 'get_elements' %}" method="post" id="id_class">
+                    {% csrf_token %}
+
+                    <div id="choises_tag">
+                        <!-- ID -->
+                        {% if ids %}
+                        <div id="ids">
+                            <h1>All ID</h1>
+                            <select name="selected_id" class="selected">
+                                <option value="None">None</option>
+                                {% for i in ids %}
+                                    <option value="{{ i }}">{{ i }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        {% endif %}
+    
+                        <!-- CLASS -->
+                        {% if classes %}
+                        <div id="classes">
+                            <h1>All CLASS</h1>
+                            <select name="selected_class" class="selected">
+                                <option value="None">None</option>
+                                {% for c in classes %}
+                                    <option value="{{ c }}">{{ c }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <br><br><br><br><br>
+                    <!-- диапазон для парсинга нескольких страниц -->
+                    <span id="range_text">range:</span>
+                    <div id="range">
+                        <input id="from" class="range_value" type="number" value="0" name="from">
+                        <span>-</span>
+                        <input id="to" class="range_value" type="number" value="0" name="to">
+                        <input type="hidden" id="is_range_value" value="False" name="is_range">
+                    </div>
+                    <br>
+
+                    <!-- тип контента -->
+                    <label for="content_type">Выберите тип контента</label>
+                    <select name="content_type" id="content_type">
+                        <option value="json">Json</option>
+                        <option value="txt">Text document</option>
+                    </select>
+                    <br>
+
+                    <input type="hidden" name="uurl" value="{{ uurl }}">
+                    <input type="submit" class="butt">
+                </form>
+                {% endif %}
+            </div>
+        </div>
+
+        <div id="main_left"></div>
+
+    </div>
+    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Delectus, voluptatem qui. Sunt facilis debitis hic, magni consectetur odit? Assumenda accusamus maiores saepe veniam? Excepturi, at. Aliquid dignissimos nam soluta quaerat.</p>
+    <script src="{% static 'js/range_toggle_button.js' %}"></script>
+</body>
+</html>

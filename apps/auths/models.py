@@ -20,19 +20,19 @@ class CastomUserManager(BaseUserManager):
 
 
 class CastomUser(AbstractBaseUser, PermissionsMixin):
-    class SubLevel(models.Choices):
+    class SubLevel(models.IntegerChoices):
         level_0 = 0
         level_1 = 1
         level_2 = 2
         level_3 = 3
-        
+
     email = models.EmailField(verbose_name='почта/логин', max_length=200, unique=True)
     name = models.CharField(verbose_name='имя', max_length=100)
     password = models.CharField(verbose_name='пароль', max_length=60, unique=True)
     is_staff: bool = models.BooleanField(default=False)
 
-    #* подписка
-    subscription: bool = models.BooleanField(default=False, verbose_name='подписка')
+    free_subscription_is_use = models.BooleanField(default=False, verbose_name='бесплатная подписка')
+    subscription = models.BooleanField(default=False, verbose_name='подписка')
     subscription_end_date = models.DateField(verbose_name='дата окончания', blank=True, null=True)
     subscription_level = models.IntegerField(choices=SubLevel.choices, blank=True, null=True, default=0)
     
@@ -69,5 +69,5 @@ class PageRequests(models.Model):
 class DataPageRequest(models.Model):
     user = models.ForeignKey(to=CastomUser, verbose_name='пользователь', on_delete=models.CASCADE)
     data = models.CharField(verbose_name="данные", max_length=1000)
-    content_type = models.CharField(verbose_name='тип контента', max_length=10)
+    content_type = models.CharField(verbose_name='тип контента', max_length=10, default='')
     date_create = models.DateField(verbose_name='дата создания',auto_now_add=True)

@@ -1,0 +1,133 @@
+body {
+    font-family: Impact, fantasy;
+    max-height: 100vh;
+}
+a {
+    text-decoration: none;
+    color: rgb(80, 33, 66);
+}
+a:hover{
+    color: rgb(148, 63, 122);
+}
+#main_content {
+    display: flex;
+    width: 100%;
+    height: 830px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+#main_right {
+    width: 20%;
+}
+#main_left {
+    width: 20%;
+}
+#main_middle {
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    height: 100%;
+}
+#main_middle_url_block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 10%;
+}
+#url_input {
+    font-size: 15px;
+    height: 30px;
+    width: 600px;
+    color: #fff;
+    background: #444;
+    border: 1px solid #444;
+    border-radius: 10px;
+}
+#take_url_button {
+    margin-top: 10px;
+    background: #444;
+    border: 1px solid #444;
+    border-radius: 10px;
+    color: #fff;
+    height: 30px;
+    width: 320px;
+}
+#take_url_button:hover{
+    background: #777;
+    border: 1px solid #777;
+}
+
+#main_options {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 50%;
+}
+#toggle_range {
+    margin-top: 10px;
+    width: 320px;
+    height: 30px;
+    font-size: 15px;
+    background: #444;
+    border: 1px solid #444;
+    color: #fff;
+    border-radius: 10px;
+}
+#toggle_range:hover {
+    background: #777;
+    border: 1px solid #777;
+}
+#id_class{
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+#choises_tag{
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+#ids {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#classes {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.selected {
+    width: 220px;
+    border: 1px solid black;
+}
+#content_type {
+    width: 165px;
+}
+.butt {
+    width: 110px;
+    height: 21px;
+}
+#range {
+    display: none;
+    width: 110px;
+    align-items: center;
+    justify-content: space-between;
+}
+.range_value {
+    display: none;
+    border: 1px solid black;
+    width: 40px;
+}
+#range_text {
+    display: none;
+}
+#is_range_value {
+    display: none;
+}

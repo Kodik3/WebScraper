@@ -16,7 +16,7 @@ class GetHtml:
             if response.status_code == 200:
                 return BS(response.text, 'lxml')
             else:
-                return None
+                return "error"
         except Exception as e:
             return f"[Error code] - {e}"
 

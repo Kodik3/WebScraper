@@ -40,7 +40,7 @@ def subscription_verification():
     else: return None
     
 @app.task
-def finish_sub(user, *args, **kwargs):
+def finish_sub(user, *args, **kwargs) -> None:
     #! пользователь купил подписку и через 30 дней функция сробатывает
     if user.subscription:
         user.subscription = False
@@ -51,12 +51,26 @@ def finish_sub(user, *args, **kwargs):
             msg='Вы можете обновить подписку на странице <a href="{}"></a>'.format('тут будет ссылка на страницу покупки подписки'),
             to_emails=[user.email]
         )
+        return None
+    return None
 
 
 @app.task(name='clearing-old-queries')
-def clearing_old_queries():
+def clearing_old_queries() -> None:
     one_month_ago = timezone.now() - timedelta(days=30)
     old_data_requests: DataPageRequest = \
         DataPageRequest.objects.filter(date_create__gte=one_month_ago.date())
     old_data_requests.delete()
-    return
+    return None
+
+@app.task
+def destroy_free_sub(user, *args, **kwargs) -> None:
+    user.subscription = False
+    user.subscription_level = 0
+    user.save(fields=['subscription', 'subscription_level'])
+    send_email(
+            header=f"| {settings.SITE_NAME} | У вас закончилась бесплатная подписка",
+            msg='Вы можете обновить подписку на странице <a href="{}"></a>'.format('тут будет ссылка на страницу покупки подписки'),
+            to_emails=[user.email]
+        )
+    return None
