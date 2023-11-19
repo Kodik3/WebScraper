@@ -20,6 +20,21 @@ class CastomUserManager(BaseUserManager):
 
 
 class CastomUser(AbstractBaseUser, PermissionsMixin):
+    """
+    Модель пользователя
+
+    Параметры:
+        - email (EmailField)
+        - name (str)
+        - password (str)
+        - is_staff (bool)
+
+    Параметры подписки:
+        - free_subscription_is_use (bool): Использовал ли бесплатную подписку.
+        - subscription (bool): Действительна ли подписка.
+        - subscription_level (int): Уровень подписки.
+        - subscription_end_date (DateField): Дата окончания подписки.
+    """
     class SubLevel(models.IntegerChoices):
         level_0 = 0
         level_1 = 1
@@ -33,8 +48,8 @@ class CastomUser(AbstractBaseUser, PermissionsMixin):
 
     free_subscription_is_use = models.BooleanField(default=False, verbose_name='бесплатная подписка')
     subscription = models.BooleanField(default=False, verbose_name='подписка')
-    subscription_end_date = models.DateField(verbose_name='дата окончания', blank=True, null=True)
     subscription_level = models.IntegerField(choices=SubLevel.choices, blank=True, null=True, default=0)
+    subscription_end_date = models.DateField(verbose_name='дата окончания', blank=True, null=True)
     
     objects = CastomUserManager()
 
@@ -51,6 +66,19 @@ class CastomUser(AbstractBaseUser, PermissionsMixin):
         return self.email
 
 class PageRequests(models.Model):
+    """
+    Модель настроек запроса
+
+    Параметры:
+        - user (CastomUser): Модель пользователя.
+        - url (str): URL куда будет поступать запрос.
+        - duration_minutes (int): Длительность запроса в минутах.
+        - shift (int): Задержка после каждого запроса в секундах.
+        - content_type (str): Тип контента.
+        - send_email (bool): Отправка сообщение пользователю после завершения запроса.
+        - id_name (str): Название id котрые будем собирать.
+        - class_name (str): Название class котрые будем собирать.
+    """
     class FileType(models.Choices):
         txt = 'txt'
         json = 'json'
@@ -58,7 +86,7 @@ class PageRequests(models.Model):
     user = models.ForeignKey(to=CastomUser, verbose_name='пользователь', on_delete=models.CASCADE)
     url = models.CharField(verbose_name='ссылка', max_length=200)
     duration_minutes = models.IntegerField(verbose_name='длительность в минутах')
-    shift = models.IntegerField(verbose_name='сдвиг') #* то есть через сколько минут будет отробатывть
+    shift = models.IntegerField(verbose_name='сдвиг')
     content_type = models.CharField(verbose_name='тип контента', choices=FileType.choices, max_length=10)
     send_email = models.BooleanField(default=False)
     
@@ -67,6 +95,14 @@ class PageRequests(models.Model):
 
 
 class DataPageRequest(models.Model):
+    """
+    Модель для хранения данных с запросов
+
+    Параметры:
+        - user (CastomUser): Модель пользователя.
+        - data (str): Данные.
+        - content_type (str): Тип контента.
+    """
     user = models.ForeignKey(to=CastomUser, verbose_name='пользователь', on_delete=models.CASCADE)
     data = models.CharField(verbose_name="данные", max_length=1000)
     content_type = models.CharField(verbose_name='тип контента', max_length=10, default='')

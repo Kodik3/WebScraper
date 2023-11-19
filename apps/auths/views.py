@@ -4,8 +4,7 @@
 from django.http import (
     HttpRequest,
     HttpResponse,
-    Http404,
-    JsonResponse
+    Http404
 )
 from django.conf import settings
 from django.shortcuts import render, redirect
@@ -156,3 +155,13 @@ def free_sub(req: HttpRequest) -> HttpResponse:
         return redirect('main')
     else:
         return HttpResponse("Нужно войти в аккаунт")
+
+def detail_data_requests(req: HttpRequest, item_id: int) -> HttpResponse:
+    context: dict = {}
+    try:
+        data_req_item = DataPageRequest.objects.get(pk=item_id)
+    except DataPageRequest.DoesNotExist:
+        raise Http404("Не найдено")
+
+    context['data_req_item'] = data_req_item
+    return render(req, 'detail_data_req.html', context)

@@ -7,7 +7,7 @@ from django.conf import settings
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings.base')
 
-app = Celery('web_scraper')
+app = Celery('settings', broker=settings.CELERY_BROKER_URL)
 app.config_from_object('django.conf:settings', namespace='CELERY')
 app.autodiscover_tasks(lambda: settings.PROJECT_APPS)
 
@@ -17,12 +17,5 @@ app.conf.beat_schedule = {
         'schedule': crontab(day_of_week='*/1')
     }
 }
+
 app.conf.timezone = 'UTC'
-
-
-@app.task(bind=True, ignore_result=True)
-def debug_task(self):
-    """
-    выводит информацию о запросе, когда задача выполняется.
-    """
-    print(f'Request: {self.request!r}')

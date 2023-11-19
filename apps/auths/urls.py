@@ -10,6 +10,7 @@ from .views import (
     BuySubView,
     user_logout,
     free_sub,
+    detail_data_requests,
 )
 
 urlpatterns: list = [
@@ -18,6 +19,7 @@ urlpatterns: list = [
     path('profile/', UserProfile.as_view(), name='user_profile'),
     path('logout/', user_logout, name='logout'),
     path('request_data/', AllUserPagesRequestsView.as_view(), name='req_data'),
+    path('detail_data_req/<int:item_id>/', detail_data_requests, name='detail_data_req'),
     path('sub/', BuySubView.as_view(), name='buy_sub'),
     path('free/sub/', free_sub, name='free_sub')
 ]

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail {{ data_req_item.id }}</title>
+</head>
+<body>
+
+    <form method="post" action="{% url 'save_data' %}">
+        {% csrf_token %}
+        <p>Date create: {{ data_req_item.date_create }}</p>
+        <p>Type: {{ data_req_item.content_type }}</p>
+        <p name="result_data">Data: {{ data_req_item.data }}</p>
+        <input type="hidden" name="content_type" value="{{ data_req_item.content_type }}">
+        <br><br>
+        <input type="submit" value="Скачать">
+    </form>
+
+</body>
+</html>

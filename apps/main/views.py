@@ -1,24 +1,28 @@
+
+"""| MAIN VIEWS |"""
+
 # Django.
 from django.http import (
     HttpRequest,
-    HttpResponse,
-    HttpResponseBadRequest
+    HttpResponse
 )
 from django.shortcuts import render
 from django.views import View
 from django.core.files.base import ContentFile
-from django.core.exceptions import ValidationError
+from django.urls import reverse
 # Local.
-from .forms import MainForm
-from .utils import GetHtml, MultiplePages
+from .utils import (
+    GetHtml,
+    MultiplePages,
+    user_level_settings
+)
 from .tasks import work_page_request
 # models.
 from .models import Element
 from auths.models import CastomUser, PageRequests
 
-#! Главная страница.
+
 class MainView(View):
-    """ для полученяи кода страницы """
     template: str = 'main_template.html'
 
     def get(self, req: HttpRequest) -> HttpResponse:
@@ -29,12 +33,12 @@ class MainView(View):
     def post(self, req: HttpRequest) -> HttpResponse:
         context: dict = {}
         data = req.POST
-        code = GetHtml.code(str(data.get('url'))) # HTML code.
+        code = GetHtml.code(str(data.get('url')))
         context["uurl"] = str(data.get('url'))
 
         if code is not None:
-            ids = GetHtml.all_id(code) # id.
-            classes = GetHtml.all_class(code) # class.
+            ids = GetHtml.all_id(code)
+            classes = GetHtml.all_class(code)
 
             context["ids"] = ids
             context["classes"] = classes
@@ -46,7 +50,9 @@ class CreatePageRequests(View):
 
     def get(self, req:HttpRequest) -> HttpResponse:
         user = req.user
-        if user.subscription is False:
+        if not user.is_authenticated:
+            return HttpResponse('Вы не авторизированы')
+        elif user.subscription is not True:
             return HttpResponse('У вас не подписки')
         context: dict = {}
         context["content_types"] = ['json', 'txt']
@@ -54,6 +60,7 @@ class CreatePageRequests(View):
     
     def post(self, req: HttpRequest) -> HttpResponse:
         data = req.POST
+        user = req.user
         
         url = str(data.get('url')) #* ссылка.
         shift = int(data.get('shift')) #? - это шаг в секундах с которым будет выполнятся функция.
@@ -68,33 +75,25 @@ class CreatePageRequests(View):
 
         if id_name == 'None' and class_name == 'None':
             context['url'] = url
+            context['shift'] = shift
+            context['minutes'] = minutes
+            context["content_types"] = ['json', 'txt']
             context['elements_error'] = "Нужно выбрать элементы для создания запроса!"
             return render(req, self.template, context)
 
-        if req.user.is_authenticated:
-            user = req.user
-            if user.subscription_level == 1:
-                max_minutes, min_shift, max_shift = 10, 90, 300
-            elif user.subscription_level == 2:
-                max_minutes, min_shift, max_shift = 30, 40, 300
-            elif user.subscription_level == 3:
-                max_minutes, min_shift, max_shift = 50, 20, 300
-            else:
-                max_minutes, min_shift, max_shift = 0, 0, 0
-                return ValidationError('Неверный уровень подписки')
-        else:
-            max_minutes, min_shift, max_shift = 0, 0, 0
-            return HttpResponseBadRequest('Вы не авторизированы')
+        user_settings: dict = user_level_settings(user.subscription_level)
 
-        if minutes > max_minutes or shift < min_shift or shift > max_shift:
-            return ValidationError(
-                f"""
-                Подписка {user.subscription_level} lvl может делать запросы '
-                максимум {max_minutes} минут, с задержкой не менее {min_shift} секунд и не более {max_shift} секунд
-                """
-            )
-        page_req: PageRequests = \
-            PageRequests.objects.create(
+        if minutes > user_settings['max_minutes']\
+        or shift < user_settings['min_shift']\
+        or shift > user_settings['max_shift']:
+            return HttpResponse(f"""
+                Подписка {user.subscription_level} lvl может делать запросы
+                максимум {user_settings['max_minutes']} минут, 
+                с задержкой не менее {user_settings['min_shift']} секунд 
+                и не более {user_settings['max_shift']} секунд
+                """)
+
+        page_req = PageRequests(
             user=user,
             url=url,
             duration_minutes=minutes,
@@ -104,7 +103,8 @@ class CreatePageRequests(View):
             id_name=id_name,
             class_name=class_name
         )
-        context['page_req'] = page_req
+        page_req.save()
+        context['page_req_id'] = page_req.id
         work_page_request.apply_async(kwargs=context)
         return HttpResponse("Success")
 
@@ -171,12 +171,13 @@ def get_elements(req: HttpRequest) -> HttpResponse:
     return render(req, 'result_data.html', context)
 
 def save_pars_data(req: HttpRequest) -> HttpResponse:
-    """ сохранение данных """
+    """
+    Функция сохроняет данные на ПК пользователя.
+    """
     if req.method == 'POST':
         data = req.POST
         result_data = data.get('result_data')
         content_type = data.get('content_type')
-        print(f"Content Type: {content_type}")
 
         element: Element = Element.objects.create()
         element.name = f"pars_document{element.id}.{content_type}"
@@ -192,6 +193,7 @@ def page_req_get_elements(req: HttpRequest) -> HttpResponse:
     context: dict = {}
     url = req.POST.get('url')
     code = GetHtml.code(url)
+    context["content_types"] = ['json', 'txt']
     context["url"] = url
     context["id_names"] = GetHtml.all_id(code)
     context["class_names"] = GetHtml.all_class(code)
