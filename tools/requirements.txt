@@ -13,11 +13,16 @@ click-plugins==1.1.1
 click-repl==0.3.0
 colorama==0.4.6
 Django==4.2.6
+django-celery-results==2.5.1
+dnspython==2.4.2
+eventlet==0.33.3
+greenlet==3.0.1
 idna==3.4
 kombu==5.3.2
 lxml==4.9.3
 prompt-toolkit==3.0.39
 python-dateutil==2.8.2
+python-decouple==3.8
 redis==5.0.1
 requests==2.31.0
 schedule==1.2.1
