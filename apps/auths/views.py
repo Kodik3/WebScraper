@@ -168,8 +168,8 @@ def save_page_request_data(req: HttpRequest, item_id: int) -> HttpResponse:
     page_data: DataPageRequest = DataPageRequest.objects.get(pk=item_id)
     page_data.name = f"page_data{item_id}.{page_data.content_type}"
 
-    content_bytes = page_data.data.encode('utf-8') # Закодируйте строку в байты перед созданием
-    content_file = ContentFile(content_bytes)
+    content_bytes = page_data.data.encode('utf-8') # Кодируем строку в байты перед созданием.
+    content_file = ContentFile(content_bytes) # Создания объекта, подобного файлу.
     page_data.file.save(page_data.name, content_file)
     page_data.save()
 
