@@ -9,7 +9,6 @@ from django.http import (
 from django.shortcuts import render
 from django.views import View
 from django.core.files.base import ContentFile
-from django.urls import reverse
 # Local.
 from .utils import (
     GetHtml,
@@ -19,7 +18,7 @@ from .utils import (
 from .tasks import work_page_request
 # models.
 from .models import Element
-from auths.models import CastomUser, PageRequests
+from auths.models import PageRequests
 
 
 class MainView(View):
@@ -178,7 +177,7 @@ def save_pars_data(req: HttpRequest) -> HttpResponse:
         data = req.POST
         result_data = data.get('result_data')
         content_type = data.get('content_type')
-
+        
         element: Element = Element.objects.create()
         element.name = f"pars_document{element.id}.{content_type}"
         content_file = ContentFile(result_data)

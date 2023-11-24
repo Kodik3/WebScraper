@@ -11,6 +11,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import authenticate, login, logout
+from django.core.files.base import ContentFile
 # model.
 from .models import DataPageRequest, CastomUser
 # forms.
@@ -128,10 +129,6 @@ def user_logout(req: HttpRequest):
     logout(req)
     return redirect('login')
 
-def content_type_filtering(user, content_type):
-    return DataPageRequest.objects.filter(
-        user=user, content_type=content_type
-    )
 
 def free_sub(req: HttpRequest) -> HttpResponse:
     context: dict = {}
@@ -156,12 +153,26 @@ def free_sub(req: HttpRequest) -> HttpResponse:
     else:
         return HttpResponse("Нужно войти в аккаунт")
 
+
 def detail_data_requests(req: HttpRequest, item_id: int) -> HttpResponse:
     context: dict = {}
     try:
         data_req_item = DataPageRequest.objects.get(pk=item_id)
-    except DataPageRequest.DoesNotExist:
-        raise Http404("Не найдено")
+    except DataPageRequest.DoesNotExist as e:
+        raise Http404(e)
 
     context['data_req_item'] = data_req_item
     return render(req, 'detail_data_req.html', context)
+
+def save_page_request_data(req: HttpRequest, item_id: int) -> HttpResponse:
+    page_data: DataPageRequest = DataPageRequest.objects.get(pk=item_id)
+    page_data.name = f"page_data{item_id}.{page_data.content_type}"
+
+    content_bytes = page_data.data.encode('utf-8') # Закодируйте строку в байты перед созданием
+    content_file = ContentFile(content_bytes)
+    page_data.file.save(page_data.name, content_file)
+    page_data.save()
+
+    response = HttpResponse(page_data.file.read(), content_type=page_data.content_type)
+    response["Content-Disposition"] = f'attachment; filename="{page_data.name}"'
+    return response

@@ -104,6 +104,8 @@ class DataPageRequest(models.Model):
         - content_type (str): Тип контента.
     """
     user = models.ForeignKey(to=CastomUser, verbose_name='пользователь', on_delete=models.CASCADE)
+    name = models.CharField(verbose_name='название', max_length=200, null=True, blank=True)
     data = models.CharField(verbose_name="данные", max_length=1000)
+    file = models.FileField(verbose_name='данные', upload_to='result_data/page_requests/', null=True, blank=True)
     content_type = models.CharField(verbose_name='тип контента', max_length=10, default='')
-    date_create = models.DateField(verbose_name='дата создания',auto_now_add=True)
+    date_create = models.DateField(verbose_name='дата создания', auto_now_add=True, blank=True, null=True)

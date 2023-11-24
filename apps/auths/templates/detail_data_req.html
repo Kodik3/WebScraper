@@ -8,11 +8,11 @@
 </head>
 <body>
 
-    <form method="post" action="{% url 'save_data' %}">
+    <form method="post" action="{% url 'save_page_data' data_req_item.id %}">
         {% csrf_token %}
         <p>Date create: {{ data_req_item.date_create }}</p>
         <p>Type: {{ data_req_item.content_type }}</p>
-        <p name="result_data">Data: {{ data_req_item.data }}</p>
+        <p name="result_data">Data: <br><textarea name="" id="" cols="200" rows="20">{{ data_req_item.data }}</textarea></p>
         <input type="hidden" name="content_type" value="{{ data_req_item.content_type }}">
         <br><br>
         <input type="submit" value="Скачать">
