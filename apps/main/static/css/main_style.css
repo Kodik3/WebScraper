@@ -1,13 +1,5 @@
 body {
-    font-family: Impact, fantasy;
     max-height: 100vh;
-}
-a {
-    text-decoration: none;
-    color: rgb(80, 33, 66);
-}
-a:hover{
-    color: rgb(148, 63, 122);
 }
 #main_content {
     display: flex;

@@ -1,15 +1,14 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% block title %} Create Page Requests {% endblock %}
+
+{% block styles %}
     <link rel="stylesheet" href="{% static 'css/page_req.css' %}">
-    <title>Create Page Requests</title>
-</head>
+    <link rel="stylesheet" href="{% static 'css/base_header.css' %}?v=1.2">
+{% endblock %}
 
-<body>
+{% block content %}
     <form action="{% url 'page_req_elem' %}" method="POST">
         {% csrf_token %}
         <br>
@@ -83,6 +82,4 @@
         <button type="submit">Создать</button>
 
     </form>
-
-</body>
-</html>
+{% endblock %}
