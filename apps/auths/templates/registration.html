@@ -1,32 +1,43 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="https://w7.pngwing.com/pngs/638/904/png-transparent-logo-circle-point-authorization-white-logo-black.png" type="image/png">
-    <title>Регистрация</title>
     <!-- start style -->
     <style>
+        canvas { position: fixed; touch-action: none; z-index: 0;}
         body{
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-direction: column;
             height: 770px;
-            color: #444;
+            color: #fff;
+            background: #c7c7c799;
         }
         input{
             width: 200px;
         }
-    </style>
+        .OS {
+            z-index: 1000;
+        }
+        </style>
     <!-- end style -->
+    <title>Регистрация</title>
 </head>
 <body>
-    <h1>Регистрация</h1>
-    <form action="/auths/reg/" method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Регистрация">
-    </form>
+    <div class="OS">
+        <h1>Регистрация</h1>
+        <form action="/auths/reg/" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Регистрация">
+        </form>
+    </div>
+
+    <script src="{% static 'js/babel.js' %}"></script>
 </body>
 </html>
