@@ -5,67 +5,38 @@
 
 {% block styles %}
     <link rel="stylesheet" href="{% static 'css/base_header.css' %}?v=1.2">
-    <style>
-        body { 
-            padding-top: 0 !important;
-            margin: 0 !important;
-        }
-        #sub_container {
-            margin-top: 0px;
-            display: flex;
-            width: 100%;
-            height: 100vh;
-            box-sizing: border-box;
-        }
-        .sub_lvl {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 34%;
-            height: 100%;
-        }
-        #lvl_1{
-            background-color: greenyellow;
-        }
-        #lvl_2{
-            background-color: goldenrod;
-        }
-        #lvl_3{
-            background-color: aqua;
-        }
-        #lvl_1:hover,
-        #lvl_2:hover,
-        #lvl_3:hover {
-            font-size: 19px;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/sub_page_style.css' %}">
 {% endblock %}
 
 {% block content %}
-    <div id="sub_container">
+<div class="container">
 
-        <div class="sub_lvl" id="lvl_1">
-            <h1>Level 1</h1>
-            <p>Длительность запроса: 0 - 10 минут.</p>
+    <div class="box">
+        <div class="content">
+            <h2>Level 1</h2>
             <p>Минимальная-максимальная задержка: 90 - 300 секунд.</p>
             {% if user.free_subscription_is_use is False %}
-                <p><a href="{% url 'free_sub' %}">Получить бусплатно на 3 дня</a></p>
+                <a href="{% url 'free_sub' %}">Получить бесплатно на 3 дня</a>
             {% endif %}
+            <a href="#">Купить</a>
         </div>
-
-        <div class="sub_lvl" id="lvl_2">
-            <h1>Level 2</h1>
-            <p>Длительность запроса: 0 - 30 минут.</p>
-            <p>Минимальная-максимальная задержка: 40 - 300 секунд.</p>
-        </div>
-
-        <div class="sub_lvl" id="lvl_3">
-            <h1>Level 3</h1>
-            <p>Длительность запроса: 0 - 50 минут.</p>
-            <p>Минимальная-максимальная задержка: 20 - 300 секунд.</p>
-        </div>
-
     </div>
-        
+
+    <div class="box">
+        <div class="content">
+            <h2>Level 2</h2>
+            <p>Минимальная-максимальная задержка: 40 - 300 секунд.</p>
+            <a href="#">Купить</a>
+        </div>
+    </div>
+
+    <div class="box">
+        <div class="content">
+            <h2>Level 3</h2>
+            <p>Минимальная-максимальная задержка: 20 - 300 секунд.</p>
+            <a href="#">Купить</a>
+        </div>
+    </div>
+
+</div>
 {% endblock %}
