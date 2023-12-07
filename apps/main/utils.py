@@ -17,7 +17,7 @@ class GetHtml:
                 return BS(response.text, 'lxml')
             else:
                 print("[Error GetHtml.code] Page not found")
-                return "[Error GetHtml.code] Page not found"
+                return None
         except Exception as e:
             return f"[Error GetHtml.code] - {e}"
 
@@ -115,27 +115,3 @@ class MultiplePages:
             except Exception as e:
                 pages_data += f"error-{page_num}:: {str(e)}"
         return pages_data
-
-
-def user_level_settings(lvl: int) -> dict[int, int]:
-    """
-    Функция для определения настроек для запроса
-
-    Параметры вывода:
-        - max_minutes(int): Максимальная длительность запроса.
-        - min_shift(int): Минимальная задержка между запросами.
-        - max_shift(int): Максимальная задержка между запросами.
-    """
-    if lvl == 1:
-        max_minutes, min_shift, max_shift = 10, 90, 300
-    elif lvl == 2:
-        max_minutes, min_shift, max_shift = 30, 40, 300
-    elif lvl == 3:
-        max_minutes, min_shift, max_shift = 50, 20, 300
-    else:
-        max_minutes, min_shift, max_shift = 0, 0, 0
-    return {
-        'max_minutes': max_minutes,
-        'min_shift' : min_shift, 
-        'max_shift' : max_shift
-    }

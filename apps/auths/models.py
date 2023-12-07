@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.core.exceptions import ValidationError
+from subscription.models import Subscription
 
 
 class CastomUserManager(BaseUserManager):
@@ -17,7 +18,7 @@ class CastomUserManager(BaseUserManager):
         kwargs.setdefault('is_staff', True)
         kwargs.setdefault('is_superuser', True)
         return self.create_user(email, password, **kwargs)
-
+    
 
 class CastomUser(AbstractBaseUser, PermissionsMixin):
     """
@@ -40,7 +41,7 @@ class CastomUser(AbstractBaseUser, PermissionsMixin):
         level_1 = 1
         level_2 = 2
         level_3 = 3
-
+    
     email = models.EmailField(verbose_name='почта/логин', max_length=200, unique=True)
     name = models.CharField(verbose_name='имя', max_length=100)
     password = models.CharField(verbose_name='пароль', max_length=60, unique=True)
@@ -64,6 +65,7 @@ class CastomUser(AbstractBaseUser, PermissionsMixin):
         
     def __str__(self):
         return self.email
+
 
 class PageRequests(models.Model):
     """

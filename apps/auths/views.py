@@ -1,6 +1,8 @@
 
 """| AUTHS VIEWS |"""
-
+# Python.
+import datetime as dt
+# Django.
 from django.http import (
     HttpRequest,
     HttpResponse,
@@ -13,7 +15,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import authenticate, login, logout
 from django.core.files.base import ContentFile
 # model.
-from .models import DataPageRequest, CastomUser
+from .models import DataPageRequest, CastomUser, Subscription
 # forms.
 from .forms import RegisterUserForm, LoginUserForm
 # tasks
@@ -115,11 +117,19 @@ class AllUserPagesRequestsView(View):
         return render(req, self.template, context)
 
 
-class BuySubView(View):
+class BuySubPageView(View):
     template: str = 'purchasing_sub.html'
     def get(self, req: HttpRequest) -> HttpResponse:
         context: dict = {}
+        context["subs"] = Subscription.objects.all()
         return render(req, self.template, context)
+
+
+class BuySubItemPageView(View):
+    template: str = ''
+
+    def get(self, req:HttpRequest, sub_lvl:int) -> HttpResponse:
+        sub = Subscription.objects
 
 
 def user_logout(req: HttpRequest):
@@ -134,12 +144,15 @@ def free_sub(req: HttpRequest) -> HttpResponse:
     context: dict = {}
     user = req.user
     DAYS_ACTIVE_3  = 3*24*60*60
+
     if user.is_authenticated:
         if user.free_subscription_is_use == True:
             return HttpResponse("Вы использовали бесплатную подписку!")
+        
         user.free_subscription_is_use = True
         user.subscription = True
         user.subscription_level = 1
+        user.subscription_end_date = dt.datetime.now() + dt.timedelta(days=3)
         user.save()
 
         context['user'] = user
@@ -163,6 +176,7 @@ def detail_data_requests(req: HttpRequest, item_id: int) -> HttpResponse:
 
     context['data_req_item'] = data_req_item
     return render(req, 'detail_data_req.html', context)
+
 
 def save_page_request_data(req: HttpRequest, item_id: int) -> HttpResponse:
     page_data: DataPageRequest = DataPageRequest.objects.get(pk=item_id)

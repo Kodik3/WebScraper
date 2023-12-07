@@ -32,8 +32,6 @@ function find_range() {
 
         toggle_range.textContent = 'Скрыть диапазон';
     }
-    console.log(is_range.value);
-    console.log(to_range.value);
     isRangeVisible = !isRangeVisible;
 }
 

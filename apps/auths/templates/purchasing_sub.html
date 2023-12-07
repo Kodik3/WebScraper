@@ -10,33 +10,18 @@
 
 {% block content %}
 <div class="container">
-
+    {% for sub in subs %}
     <div class="box">
+        <span></span>
         <div class="content">
-            <h2>Level 1</h2>
-            <p>Минимальная-максимальная задержка: 90 - 300 секунд.</p>
+            <h2>Level {{ sub.level }}</h2>
+            <p>{{ sub.description }}</p>
             {% if user.free_subscription_is_use is False %}
                 <a href="{% url 'free_sub' %}">Получить бесплатно на 3 дня</a>
             {% endif %}
-            <a href="#">Купить</a>
+            <a href="#">Купить {{ sub.price }}$</a>
         </div>
     </div>
-
-    <div class="box">
-        <div class="content">
-            <h2>Level 2</h2>
-            <p>Минимальная-максимальная задержка: 40 - 300 секунд.</p>
-            <a href="#">Купить</a>
-        </div>
-    </div>
-
-    <div class="box">
-        <div class="content">
-            <h2>Level 3</h2>
-            <p>Минимальная-максимальная задержка: 20 - 300 секунд.</p>
-            <a href="#">Купить</a>
-        </div>
-    </div>
-
+    {% endfor %}
 </div>
 {% endblock %}

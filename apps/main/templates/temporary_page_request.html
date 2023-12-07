@@ -33,11 +33,11 @@
         <input type="hidden" name="url" value="{{ url }}" required>
         <br>
         <label for="shift">Задержка <i>(seconds)</i>:</label>
-        <input type="number" id="shift" name="shift" required>
+        <input type="number" id="shift" name="shift" value="{{ shift }}" required>
         <br><br>
     
         <label for="duration_minutes">Длительность <i>(minutes)</i>:</label>
-        <input type="number" id="duration_minutes" name="duration_minutes" required>
+        <input type="number" id="duration_minutes" name="duration_minutes" value="{{ minutes }}" required>
         <br><br>
         
         <label for="content_type">Тип контента: </label>
@@ -55,25 +55,23 @@
         {% if id_names or class_names%}
         <div id="choises_tag">
             {% if id_names %}
-            <span>ID name: </span>
+            <span>ID name: </span><br>
             <select name="id_name" class="selected">
                 <option value="None">None</option>
                 {% for i in id_names %}
                     <option value="{{ i }}">{{ i }}</option>
                 {% endfor %}
             </select>
-            <br><br>
             {% endif %}
 
             {% if class_names %}
-            <span>Class name: </span>
+            <span>Class name: </span><br>
             <select name="class_name" class="selected">
                 <option value="None">None</option>
                 {% for c in class_names %}
                     <option value="{{ c }}">{{ c }}</option>
                 {% endfor %}
             </select>
-            <br><br>
             {% endif %}
         </div>
         <br>

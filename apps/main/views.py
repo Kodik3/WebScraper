@@ -12,13 +12,13 @@ from django.core.files.base import ContentFile
 # Local.
 from .utils import (
     GetHtml,
-    MultiplePages,
-    user_level_settings
+    MultiplePages
 )
 from .tasks import work_page_request
 # models.
 from .models import Element
 from auths.models import PageRequests
+from subscription.models import Subscription
 
 
 class MainView(View):
@@ -79,8 +79,8 @@ class CreatePageRequests(View):
             context["content_types"] = ['json', 'txt']
             context['elements_error'] = "Нужно выбрать элементы для создания запроса!"
             return render(req, self.template, context)
-
-        user_settings: dict = user_level_settings(user.subscription_level)
+        
+        user_settings: dict = Subscription.objects.get(level=user.subscription_level).settings()
 
         if minutes > user_settings['max_minutes']\
         or shift < user_settings['min_shift']\
