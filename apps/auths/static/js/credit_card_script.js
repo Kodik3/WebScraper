@@ -1,35 +1,3 @@
-function validateForm() {
-  var cardNumber = document.getElementById("card_number").value;
-  var cardHolder = document.getElementById("card_holder").value;
-  var expiryDate = document.getElementById("expiry_date").value;
-  var cvv = document.getElementById("cvv").value;
-
-  var errorMessages = "";
-
-  if (cardNumber.length !== 19 || !/^\d{4}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}$/.test(cardNumber)) {
-      errorMessages += "Неверный номер карты. ";
-  }
-
-  if (!/^[a-zA-Z ]+$/.test(cardHolder)) {
-      errorMessages += "Неверное имя держателя карты. ";
-  }
-
-  if (!/^\d{2}\/\d{2}$/.test(expiryDate)) {
-      errorMessages += "Неверный срок действия карты. ";
-  }
-
-  if (!/^\d{3}$/.test(cvv)) {
-      errorMessages += "Неверный CVV. ";
-  }
-
-  var errorContainer = document.getElementById("errorMessages");
-  errorContainer.innerHTML = "<p class='error-message'>" + errorMessages + "</p>";
-
-  if (errorMessages === "") {
-      document.getElementById("paymentForm").submit();
-  }
-}
-
 function formatCardNumber() {
   var input = document.getElementById("card_number");
   // Ограничиваем ввод символов
