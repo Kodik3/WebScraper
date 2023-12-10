@@ -16,7 +16,6 @@ class GetHtml:
             if response.status_code == 200:
                 return BS(response.text, 'lxml')
             else:
-                print("[Error GetHtml.code] Page not found")
                 return None
         except Exception as e:
             return f"[Error GetHtml.code] - {e}"

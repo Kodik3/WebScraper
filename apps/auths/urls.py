@@ -11,7 +11,8 @@ from .views import (
     user_logout,
     free_sub,
     detail_data_requests,
-    save_page_request_data
+    save_page_request_data,
+    BuySubLevelPageView
 )
 
 urlpatterns: list = [
@@ -25,6 +26,6 @@ urlpatterns: list = [
     path('detail_data_req/<int:item_id>/save',save_page_request_data, name='save_page_data'),
 
     path('sub/', BuySubPageView.as_view(), name='buy_sub'),
-    # path('sub/<int:sub_lvl>'),#!!!!!!!!!!!!!!!!
+    path('sub/<int:sub_lvl>', BuySubLevelPageView.as_view(), name='buy_sub_level'),
     path('free/sub/', free_sub, name='free_sub')
 ]

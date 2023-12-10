@@ -5,7 +5,7 @@
 
 {% block styles %}
     <link rel="stylesheet" href="{% static 'css/base_header.css' %}?v=1.2">
-    <link rel="stylesheet" href="{% static 'css/sub_page_style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/sub_page_style.css' %}?v=1">
 {% endblock %}
 
 {% block content %}
@@ -19,7 +19,7 @@
             {% if user.free_subscription_is_use is False %}
                 <a href="{% url 'free_sub' %}">Получить бесплатно на 3 дня</a>
             {% endif %}
-            <a href="#">Купить {{ sub.price }}$</a>
+            <a href="{% url 'buy_sub_level' sub_lvl=sub.level %}">Купить {{ sub.price }}$</a>
         </div>
     </div>
     {% endfor %}

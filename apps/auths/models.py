@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.core.exceptions import ValidationError
-from subscription.models import Subscription
+from django.core.validators import RegexValidator
 
 
 class CastomUserManager(BaseUserManager):
@@ -111,3 +111,16 @@ class DataPageRequest(models.Model):
     file = models.FileField(verbose_name='данные', upload_to='result_data/page_requests/', null=True, blank=True)
     content_type = models.CharField(verbose_name='тип контента', max_length=10, default='')
     date_create = models.DateField(verbose_name='дата создания', auto_now_add=True, blank=True, null=True)
+
+
+class Card(models.Model):
+    user = models.ForeignKey(to=CastomUser, verbose_name='владелец', on_delete=models.CASCADE, related_name='card')
+    number = models.CharField(verbose_name='номер',max_length=16, validators=[
+            RegexValidator(regex=r'^\d{16}$', message='Number не верный формат')])
+    cvv = models.CharField(verbose_name='номер', max_length=3, validators=[
+            RegexValidator(regex=r'^\d{3}$', message='CVV не верный формат')])
+    
+    class Meta:
+        ordering = ('-id',)
+        verbose_name = 'Карта'
+        verbose_name_plural = 'Карты'

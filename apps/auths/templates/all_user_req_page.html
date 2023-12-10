@@ -1,17 +1,17 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'css/all_user_req_page_style.css' %}?v=1.3">
-    <title>All pages requests</title>
-</head>
-<body>
+
+{% block title %} All pages requests {% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/base_header.css' %}?v=1.2">
+    <link rel="stylesheet" href="{% static 'css/all_user_req_page_style.css' %}?v=1">
+{% endblock %}
+
+
+{% block content %}
 
     <div id="os">
-
         <div id="header">
             <span class="current">
                 Страница {{ current_page.number }} из {{ current_page.paginator.num_pages }}.
@@ -49,8 +49,6 @@
                 {% endfor %}
             </div>
         </div>
-
     </div>
-    
-</body>
-</html>
+
+{% endblock %}

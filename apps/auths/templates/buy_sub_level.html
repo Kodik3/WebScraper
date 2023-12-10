@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Level {{ sub.level }} {% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/base_header.css' %}?v=1.2">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/credit_card_style.css' %}">
+{% endblock %}
+
+{% block content %}
+
+    {% if not user.is_authenticated %}
+        <p class="error">Для покупки подписки нужно войти в аккаунт</p>
+    {% else %}
+        <h1>Level {{ sub.level }}</h1>
+        <p>{{ sub.description }}</p>
+        <!-- Credit Card Form -->
+        <form action="#" method="post">
+            {% csrf_token %}
+            <input type="text" id="card_number" name="card_number" placeholder="Введите номер карты" required>
+            <input type="text" id="expiry_date" name="expiry_date" placeholder="ММ/ГГ" required>
+            <input type="text" id="cvv" name="cvv" placeholder="Введите CVV" required>
+            <button type="submit">Оплатить {{ sub.price }}$</button>
+        </form>
+    {% endif %}
+        
+    <script src="{% static 'js/credit_card_script.js' %}?v=1.4"></script>
+{% endblock %}

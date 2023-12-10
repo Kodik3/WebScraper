@@ -9,7 +9,7 @@ class Subscription(models.Model):
     max_shift = models.IntegerField(verbose_name='максимальная задержка в секундах')
     maximum_request_duration = models.IntegerField(verbose_name='максимальная длительность запроса')
 
-    def settings(self):
+    def settings(self) -> dict:
         """
         настройки для пользователя
         """
@@ -20,9 +20,9 @@ class Subscription(models.Model):
         }
 
     @property
-    def description(self):
+    def description(self) -> str:
         """
-        описание подписки
+        описание подписки (str)
         """
         return f"""
         Минимальная-максимальная задержка: {self.min_shift} - {self.max_shift} секунд.\n

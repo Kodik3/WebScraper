@@ -3,11 +3,11 @@ from .models import (
     CastomUser,
     PageRequests,
     DataPageRequest,
-    Subscription
+    Card
 )
 
 
 admin.site.register(CastomUser)
 admin.site.register(PageRequests)
 admin.site.register(DataPageRequest)
-admin.site.register(Subscription)
+admin.site.register(Card)

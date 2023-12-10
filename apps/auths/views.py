@@ -15,7 +15,8 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import authenticate, login, logout
 from django.core.files.base import ContentFile
 # model.
-from .models import DataPageRequest, CastomUser, Subscription
+from .models import DataPageRequest, CastomUser
+from subscription.models import Subscription
 # forms.
 from .forms import RegisterUserForm, LoginUserForm
 # tasks
@@ -125,11 +126,14 @@ class BuySubPageView(View):
         return render(req, self.template, context)
 
 
-class BuySubItemPageView(View):
-    template: str = ''
+class BuySubLevelPageView(View):
+    template: str = 'buy_sub_level.html'
 
     def get(self, req:HttpRequest, sub_lvl:int) -> HttpResponse:
-        sub = Subscription.objects
+        sub = Subscription.objects.get(level=sub_lvl)
+        context: dict = {'sub' : sub}
+        context['user'] = req.user
+        return render(req, self.template, context)
 
 
 def user_logout(req: HttpRequest):

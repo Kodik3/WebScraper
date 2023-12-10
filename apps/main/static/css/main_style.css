@@ -1,5 +1,7 @@
 body {
     max-height: 100vh;
+    background-color: #111;
+    color: #fff;
 }
 #main_content {
     display: flex;
@@ -8,10 +10,7 @@ body {
     overflow: hidden;
     margin-top: 10px;
 }
-#main_right {
-    width: 20%;
-}
-#main_left {
+#main_right, #main_left  {
     width: 20%;
 }
 #main_middle {
@@ -20,13 +19,20 @@ body {
     width: 60%;
     height: 100%;
 }
-#main_middle_url_block {
+#url_form_block {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100%;
     height: 10%;
+}
+#url_form_block .url_block {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50%;
+    width: 100%;
 }
 #url_input {
     font-size: 15px;
@@ -45,6 +51,7 @@ body {
     color: #fff;
     height: 30px;
     width: 320px;
+    display: none;
 }
 #take_url_button:hover{
     background: #777;

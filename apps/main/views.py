@@ -31,16 +31,14 @@ class MainView(View):
 
     def post(self, req: HttpRequest) -> HttpResponse:
         context: dict = {}
-        data = req.POST
-        code = GetHtml.code(str(data.get('url')))
-        context["uurl"] = str(data.get('url'))
+        url = req.POST.get('url')
+        code = GetHtml.code(str(url))
+        context["uurl"] = str(url)
+        ids = GetHtml.all_id(code)
+        classes = GetHtml.all_class(code)
 
-        if code is not None:
-            ids = GetHtml.all_id(code)
-            classes = GetHtml.all_class(code)
-
-            context["ids"] = ids
-            context["classes"] = classes
+        context["ids"] = ids
+        context["classes"] = classes
         return render(req, self.template, context)
 
 
