@@ -43,6 +43,7 @@ class GetHtml:
         """ функция очистки текста """
         cleaned_text = text.encode("utf-8").decode("unicode_escape")
         cleaned_text = "".join(char for char in cleaned_text if unicodedata.category(char)[0] != "C" and ord(char) < 128)
+        cleaned_text = ' '.join(cleaned_text.split())  # блок для удаления повторяющихся пробелов.
         return cleaned_text
         
     @staticmethod
