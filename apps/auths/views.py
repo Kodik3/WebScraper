@@ -159,10 +159,10 @@ def free_sub(req: HttpRequest) -> HttpResponse:
         user.subscription_end_date = dt.datetime.now() + dt.timedelta(days=3)
         user.save()
 
-        context['user'] = user
+        context['user_id'] = user.id
         destroy_free_sub.apply_async(kwargs=context, countdown=DAYS_ACTIVE_3)
         send_email(
-            header=f"| {settings.SITE_NAME} | Подписка lvl-1",
+            header=f"Подписка lvl-1",
             msg='Вы получили подписку, она закончится через 3 дня',
             to_emails=[user.email]
         )

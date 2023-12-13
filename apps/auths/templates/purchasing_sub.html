@@ -16,7 +16,7 @@
         <div class="content">
             <h2>Level {{ sub.level }}</h2>
             <p>{{ sub.description }}</p>
-            {% if user.free_subscription_is_use is False %}
+            {% if user.free_subscription_is_use is False and sub.level == 1 %}
                 <a href="{% url 'free_sub' %}">Получить бесплатно на 3 дня</a>
             {% endif %}
             <a href="{% url 'buy_sub_level' sub_lvl=sub.level %}">Купить {{ sub.price }}$</a>

@@ -5,7 +5,7 @@ from django.conf import settings
 from django.utils import timezone
 from django.urls import reverse
 # models.
-from .models import DataPageRequest
+from .models import DataPageRequest, CastomUser
 # Celery.
 from settings.celery import app
 # Local.
@@ -38,8 +38,9 @@ def subscription_link():
 #     else: return None
     
 @app.task
-def finish_sub(user, *args, **kwargs) -> None:
+def finish_sub(user_id, *args, **kwargs) -> None:
     #! пользователь купил подписку и через 30 дней функция сробатывает
+    user = CastomUser.objects.get(pk=user_id)
     if user.subscription:
         user.subscription = False
         user.subscription_level = 0
@@ -62,10 +63,11 @@ def clearing_old_queries() -> None:
     return None
 
 @app.task
-def destroy_free_sub(user, *args, **kwargs) -> None:
+def destroy_free_sub(user_id, *args, **kwargs) -> None:
+    user = CastomUser.objects.get(pk=user_id)
     user.subscription = False
     user.subscription_level = 0
-    user.save(fields=['subscription', 'subscription_level'])
+    user.save()
     send_email(
             header="У вас закончилась бесплатная подписка",
             msg=f'Вы можете обновить подписку на странице {subscription_link()}',
