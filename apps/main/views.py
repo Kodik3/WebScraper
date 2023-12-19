@@ -141,8 +141,6 @@ def get_elements(req: HttpRequest) -> HttpResponse:
                     context["content_type"] = content_type
                 else:
                     print("[Error] MultiplePages")
-                print("MultiplePages")
-                print(pages)
                 context["pages"] = pages
             except Exception as e:
                 context["error"] = str(e)
@@ -154,7 +152,6 @@ def get_elements(req: HttpRequest) -> HttpResponse:
                     content_type=content_type
                 )
                 context["content_type"] = content_type
-                print("selected_class")
             if selected_id != 'None':
                 context["ids"] = GetHtml.id_elements(
                     code=GetHtml.code(url=url),
@@ -162,7 +159,6 @@ def get_elements(req: HttpRequest) -> HttpResponse:
                     content_type=content_type
                 )
                 context["content_type"] = content_type
-                print("selected_id")
     except Exception as e:
         context["error"] = str(e)
     return render(req, 'result_data.html', context)

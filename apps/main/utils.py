@@ -43,36 +43,41 @@ class GetHtml:
         """ функция очистки текста """
         cleaned_text = text.encode("utf-8").decode("unicode_escape")
         cleaned_text = "".join(char for char in cleaned_text if unicodedata.category(char)[0] != "C" and ord(char) < 128)
-        cleaned_text = ' '.join(cleaned_text.split())  # блок для удаления повторяющихся пробелов.
+        cleaned_text = ' '.join(cleaned_text.split())
         return cleaned_text
-        
+    
+    @staticmethod
+    def get_text_from_element(element):
+        """ функция для получения текста из элемента """
+        text = GetHtml.clean_text(element.text)
+        if not text:
+            inner_text = GetHtml.clean_text(' '.join([tag.text for tag in element.find_all(text=True, recursive=False)]))
+            return inner_text
+        return text
+
+    @staticmethod
+    def get_elements_text(elements, content_type: str):
+        """ функция для получения текста из элементов """
+        result = None
+        if elements:
+            if content_type == 'txt':
+                result = ['{}. {}'.format(idx, GetHtml.get_text_from_element(element)) for idx, element in enumerate(elements, 1)]
+                result = '\n'.join(result)
+            elif content_type == 'json':
+                result = json.dumps({f"{idx}": GetHtml.get_text_from_element(element) for idx, element in enumerate(elements, 1)})
+        return result
+
     @staticmethod
     def class_elements(code, class_name: str, content_type: str):
         """ функция для получения данных из всех классов одного названия """
-        if code:
-            elements = code.find_all(class_=class_name)
-            if content_type == "txt":
-                result = ['{}. {}'.format(idx, GetHtml.clean_text(element.text)) for idx, element in enumerate(elements, 1)]
-                result = '\n'.join(result)
-            elif content_type == 'json':
-                result = json.dumps({f"{idx}": GetHtml.clean_text(element.text) for idx, element in enumerate(elements, 1)})
-            return result
-        else:
-            return []
+        elements = code.find_all(class_=class_name)
+        return GetHtml.get_elements_text(elements, content_type)
 
     @staticmethod
     def id_elements(code, id_name: str, content_type: str):
         """ функция для получения данных из всех id одного названия """
-        if code:
-            elements = code.find_all(id_=id_name)
-            if content_type == 'txt':
-                result = ['{}. {}'.format(idx, GetHtml.clean_text(element.text)) for idx, element in enumerate(elements, 1)]
-                result = '\n'.join(result)
-            elif content_type == 'json':
-                result = json.dumps({f"{idx}": GetHtml.clean_text(element.text) for idx, element in enumerate(elements, 1)})
-            return result
-        else:
-            return []
+        elements = code.find_all(id_=id_name)
+        return GetHtml.get_elements_text(elements, content_type)
 
 
 class MultiplePages:
@@ -90,10 +95,10 @@ class MultiplePages:
                 code = GetHtml.code(page_url)
                 # class.
                 if cls_name != 'None':
-                    pages_data[f"page-{page_num}"] = GetHtml.class_elements(code, cls_name, content_type)
+                    pages_data[f"Page-{page_num}"] = GetHtml.class_elements(code, cls_name, content_type)
                 # id.
                 if id_name != 'None':
-                    pages_data[f"page-{page_num}"] = GetHtml.id_elements(code, id_name, content_type)
+                    pages_data[f"Page-{page_num}"] = GetHtml.id_elements(code, id_name, content_type)
             except Exception as e:
                 pages_data[f"error-{page_num}"] = str(e)
         return pages_data
