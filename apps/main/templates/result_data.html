@@ -3,8 +3,28 @@
 {% block title%} Result data {% endblock %}
 
 {% block styles %}
-<link rel="stylesheet" href="{% static 'css/base_header.css' %}?v=1.2">
+<link rel="stylesheet" href="{% static 'css/base_header.css' %}?v={{ last_modified_time }}">
 <style>
+    body {
+        color: #fff;
+        background: #111;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    button, input[type="submit"] {
+        width: 130px;
+        height: 30px;
+        color: #fff;
+        background: rgba(65, 65, 65, 0.2);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        font-size: 15px;
+    }
+    input[type="submit"] {
+        margin-left: 15px;
+    }
+    button:hover, 
+    input[type="submit"]:hover {
+        background-color: #777;
+    }
     #range {
         width: 110px;
         display: flex;
@@ -23,7 +43,7 @@
     <h1>Result data</h1>
     <form method="post" action="{% url 'save_data' %}">
         {% csrf_token %}
-        <textarea name="result_data" id="result" cols="30" rows="10">
+        <textarea name="result_data" id="rData" cols="70" rows="15">
 {% if classes %}
 {{ classes }}
 {% endif %}
@@ -38,7 +58,9 @@
         </textarea>
         <input type="hidden" name="content_type" value="{{ content_type }}">
         <br><br>
+        <button id="copyButton">Скопировать</button>
         <input type="submit" value="Скачать">
     </form>
 
+    <script src="{% static 'js/copyText.js' %}?v={{ last_modified_time }}"></script>
 {% endblock %}

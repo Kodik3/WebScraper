@@ -30,8 +30,8 @@ class Subscription(models.Model):
         """
                 
     class Meta:
-        verbose_name = 'Подписка'
-        verbose_name_plural = 'Подписка'
+        verbose_name = 'Level'
+        verbose_name_plural = 'Levels'
 
     def __str__(self):
         return f"Level {self.level} | Price {self.price}$"

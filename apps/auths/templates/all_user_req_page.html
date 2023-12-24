@@ -4,8 +4,8 @@
 {% block title %} All pages requests {% endblock %}
 
 {% block styles %}
-    <link rel="stylesheet" href="{% static 'css/base_header.css' %}?v=1.2">
-    <link rel="stylesheet" href="{% static 'css/all_user_req_page_style.css' %}?v=1">
+    <link rel="stylesheet" href="{% static 'css/base_header.css' %}?v={{ last_modified_time }}">
+    <link rel="stylesheet" href="{% static 'css/all_user_req_page_style.css' %}?v={{ last_modified_time }}">
 {% endblock %}
 
 
@@ -50,5 +50,7 @@
             </div>
         </div>
     </div>
+
+    <script src="{% static 'js/copyText.js' %}?v=1.5"></script>
 
 {% endblock %}

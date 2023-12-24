@@ -32,8 +32,11 @@ class MainView(View):
     def post(self, req: HttpRequest) -> HttpResponse:
         context: dict = {}
         url = req.POST.get('url')
-        code = GetHtml.code(str(url))
-        context["uurl"] = str(url)
+
+        code = GetHtml.code(url)
+        if code is None:
+            return HttpResponse("NONE!!!!")
+        context["uurl"] = url
         ids = GetHtml.all_id(code)
         classes = GetHtml.all_class(code)
 

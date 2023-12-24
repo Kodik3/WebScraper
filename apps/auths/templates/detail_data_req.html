@@ -1,22 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail {{ data_req_item.id }}</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load static %}
 
+{% block title %} Detail {{ data_req_item.id }} {% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/base_header.css' %}?v={{ last_modified_time }}">
+    <style>
+        body {
+            color: #fff;
+            background: #111;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        button, input[type="submit"] {
+            width: 130px;
+            height: 30px;
+            color: #fff;
+            background: rgba(65, 65, 65, 0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            font-size: 15px;
+        }
+        input[type="submit"] {
+            margin-left: 15px;
+        }
+        button:hover, 
+        input[type="submit"]:hover {
+            background-color: #777;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
     <form method="post" action="{% url 'save_page_data' data_req_item.id %}">
         {% csrf_token %}
         <p>Date create: {{ data_req_item.date_create }}</p>
         <p>Type: {{ data_req_item.content_type }}</p>
-        <p name="result_data">Data: <br><textarea name="" id="" cols="200" rows="20">{{ data_req_item.data }}</textarea></p>
+        <p name="result_data">
+            Data: <br>
+            <textarea name="" id="rData" cols="200" rows="20">{{ data_req_item.data }}</textarea>
+        </p>
         <input type="hidden" name="content_type" value="{{ data_req_item.content_type }}">
-        <br><br>
+        <button id="copyButton">Скопировать</button>
         <input type="submit" value="Скачать">
     </form>
 
-</body>
-</html>
+    <script src="{% static 'js/copyText.js' %}?v={{ last_modified_time }}"></script>
+
+{% endblock %}

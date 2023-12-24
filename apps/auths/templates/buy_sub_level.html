@@ -4,7 +4,7 @@
 {% block title %} Level {{ sub.level }} {% endblock %}
 
 {% block styles %}
-    <link rel="stylesheet" href="{% static 'css/base_header.css' %}?v=1.2">
+    <link rel="stylesheet" href="{% static 'css/base_header.css' %}?v={{ last_modified_time }}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/credit_card_style.css' %}">
 {% endblock %}
 

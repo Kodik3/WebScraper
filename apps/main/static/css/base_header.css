@@ -14,10 +14,18 @@
 }
 
 .header-SiteName a {
-    color: #fff;
+    color: #ffffff00;
     font-size: 24px;
     text-decoration: none;
     font-weight: bold;
+    -webkit-text-stroke: 1px white;
+    text-shadow: 1px 0 10px white;
+    transition: color 0.2s, text-shadow 0.2s;
+}
+
+.header-SiteName a:hover {
+    color: #fff;
+    text-shadow: 1px 0 15px white;
 }
 
 .header-options {
@@ -26,6 +34,12 @@
 
 .header-options_item {
     margin-right: 20px;
+}
+
+.header-options_item a:hover,
+.header-user-status a:hover {
+    transition: color 0.2s, text-shadow 0.2s;
+    text-shadow: 1px 0 5px white;
 }
 
 .header-options_item a {

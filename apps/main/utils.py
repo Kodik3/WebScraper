@@ -13,12 +13,13 @@ class GetHtml:
         """ функция для взятия кода страницы """
         try:
             response = requests.get(url=url)
+            response.raise_for_status()
             if response.status_code == 200:
-                return BS(response.text, 'lxml')
+                return BS(response.text, 'html.parser')
             else:
                 return None
-        except Exception as e:
-            return f"[Error GetHtml.code] - {e}"
+        except requests.exceptions.RequestException:
+            return None
 
     @staticmethod
     def all_id(code) -> list:

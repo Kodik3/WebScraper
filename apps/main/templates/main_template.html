@@ -4,8 +4,8 @@
 {% block title %} Main {% endblock %}
 
 {% block styles %}
-    <link rel="stylesheet" href="{% static 'css/main_style.css' %}?v=1.1">
-    <link rel="stylesheet" href="{% static 'css/base_header.css' %}?v=1.2">
+    <link rel="stylesheet" href="{% static 'css/main_style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base_header.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -77,7 +77,7 @@
                     <br>
 
                     <input type="hidden" name="uurl" value="{{ uurl }}">
-                    <input type="submit" class="butt">
+                    <input type="submit" class="butt" value="Получить">
                 </form>
                 {% endif %}
             </div>

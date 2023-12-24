@@ -4,8 +4,8 @@
 {% block title %} Create Page Requests {% endblock %}
 
 {% block styles %}
-    <link rel="stylesheet" href="{% static 'css/page_req.css' %}">
-    <link rel="stylesheet" href="{% static 'css/base_header.css' %}?v=1.2">
+    <link rel="stylesheet" href="{% static 'css/page_req.css' %}?v={{ last_modified_time }}">
+    <link rel="stylesheet" href="{% static 'css/base_header.css' %}?v={{ last_modified_time }}">
 {% endblock %}
 
 {% block content %}

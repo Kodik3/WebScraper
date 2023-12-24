@@ -4,8 +4,8 @@
 {% block title %} Sub documentation {% endblock %}
 
 {% block styles %}
-    <link rel="stylesheet" href="{% static 'css/base_header.css' %}?v=1.2">
-    <link rel="stylesheet" href="{% static 'css/sub_page_style.css' %}?v=1">
+    <link rel="stylesheet" href="{% static 'css/base_header.css' %}?v={{ last_modified_time }}">
+    <link rel="stylesheet" href="{% static 'css/sub_page_style.css' %}?v={{ last_modified_time }}">
 {% endblock %}
 
 {% block content %}

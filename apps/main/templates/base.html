@@ -17,7 +17,7 @@
             overscroll-behavior: none;
         }
         body::-webkit-scrollbar {
-            display: none; /* Скрыть полосы прокрутки для веб-браузеров, использующих WebKit (Chrome, Safari) */
+            display: none; /* Скрыть полосы прокрутки для веб-браузеров, использующих WebKit */
         }
         .error {
             color: red;
@@ -31,10 +31,11 @@
 
         <div class="header-options">
             <div class="header-options_item"><a href="{% url 'buy_sub' %}">Подписка</a></div>
-            <div class="header-options_item"><a href="{% url 'page_req' %}">Create request</a></div>
+            <div class="header-options_item"><a href="{% url 'page_req' %}">Создать запрос</a></div>
             {% if user.free_subscription_is_use is False %}
                 <div class="header-options_item"><a href="{% url 'free_sub' %}">Бесплатная подписка</a></div>
             {% endif %}
+            <div class="header-options_item"><a href="{% url 'req_data' %}">Данные запроса</a></div>
             <div class="header-options_item"><a href="https://www.youtube.com/watch?v=QX43QTYyV-8">Spin Fish</a></div>
         </div>
 
