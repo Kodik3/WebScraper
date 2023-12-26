@@ -77,7 +77,7 @@ class GetHtml:
     @staticmethod
     def id_elements(code, id_name: str, content_type: str):
         """ функция для получения данных из всех id одного названия """
-        elements = code.find_all(id_=id_name)
+        elements = code.find_all(id=id_name)
         return GetHtml.get_elements_text(elements, content_type)
 
 

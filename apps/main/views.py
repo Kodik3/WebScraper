@@ -154,14 +154,13 @@ def get_elements(req: HttpRequest) -> HttpResponse:
                     class_name=selected_class,
                     content_type=content_type
                 )
-                context["content_type"] = content_type
             if selected_id != 'None':
                 context["ids"] = GetHtml.id_elements(
                     code=GetHtml.code(url=url),
                     id_name=selected_id,
                     content_type=content_type
                 )
-                context["content_type"] = content_type
+            context["content_type"] = content_type
     except Exception as e:
         context["error"] = str(e)
     return render(req, 'result_data.html', context)
