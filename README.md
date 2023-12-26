@@ -1,4 +1,6 @@
-# test url: https://quotes.toscrape.com, http://books.toscrape.com
+# test url: 
+# https://quotes.toscrape.com
+# http://books.toscrape.com
 
 
 # ЗАПУСК CELERY
